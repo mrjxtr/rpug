@@ -1,0 +1,30 @@
+{
+  "results": [
+    {
+      "name": { "title": "Mr", "first": "John", "last": "Doe" },
+      "dob": { "date": "1989-05-30T23:07:31.851Z", "age": 36 },
+      "location": {
+        "street": { "number": 5843, "name": "Duke St" },
+        "city": "Pagadian",
+        "Region": "Zamboanga Del Sur",
+        "country": "Philippines",
+        "zipcode": "7016"
+      },
+      "gender": "male",
+      "phone": "09123456789",
+      "email": "john.doe@example.com",
+      "login": {
+        "uuid": "14fa0589-a264-4fdb-945b-4971d138f118",
+        "username": "john.doe123",
+        "password": "secret"
+      },
+      "registered": { "date": "2025-04-03T02:01:00.708Z", "age": 3 }
+    }
+  ],
+  "info": {
+    "seed": "2d0cd4170d54fbacdcc1e679ecf394cd",
+    "results": 1,
+    "page": 1,
+    "version": "1.4"
+  }
+}
