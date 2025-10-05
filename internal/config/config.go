@@ -41,23 +41,27 @@ func LoadConfig() (*Config, error) {
 // returning an error if version is not set.
 func (c *Config) validate() error {
 	const (
-		PORT = "3000"
-		ENV  = "dev"
+		PORT    = "3000"
+		ENV     = "dev"
 		VERSION = "debug"
 	)
 
 	if c.Port == "" {
-		slog.Warn("Missing PORT environment variable using default", "PORT", PORT)
+		slog.Info("Missing PORT environment variable using default", "PORT", PORT)
 		c.Port = PORT
 	}
 
 	if c.Env == "" {
-		slog.Warn("Missing ENV environment variable using default", "ENV", ENV)
+		slog.Info("Missing ENV environment variable using default", "ENV", ENV)
 		c.Env = ENV
 	}
 
-	if c.Version == "" {
-		slog.Warn("Missing VERSION environment variable using default", "VERSION", VERSION)
+	if c.Version == "" || c.Env == "dev" {
+		slog.Info(
+			"Missing VERSION environment variable using default",
+			"VERSION",
+			VERSION,
+		)
 		c.Version = VERSION
 	}
 

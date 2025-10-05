@@ -5,12 +5,13 @@ import (
 	"testing"
 )
 
+// TestSeedGenerator ensures generated seeds are 16-byte hex and decodable.
 func TestSeedGenerator(t *testing.T) {
 	const seedLen = 32
 
 	seed, err := generateSeed()
 	if err != nil {
-		t.Fatalf("expected no erro, got: %v", err)
+		t.Fatalf("expected no error, got: %v", err)
 	}
 
 	if len(seed) != seedLen {
@@ -22,6 +23,7 @@ func TestSeedGenerator(t *testing.T) {
 	}
 }
 
+// TestRNGDeterminism verifies identical seeds yield identical sequences.
 func TestRNGDeterminism(t *testing.T) {
 	const seed = "8959bcbac47d82c434fd8f154dab3e04"
 
@@ -41,6 +43,7 @@ func TestRNGDeterminism(t *testing.T) {
 	}
 }
 
+// TestRNGUniqueness checks that different seeds produce different sequences.
 func TestRNGUniqueness(t *testing.T) {
 	const n = 1000
 	rngA := newRNGfromSeed("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
