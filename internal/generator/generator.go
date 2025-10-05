@@ -1,11 +1,17 @@
 // Package generator
 package generator
 
-import "github.com/mrjxtr/rpug/internal/config"
+import (
+	"log/slog"
+	mathrand "math/rand"
+	"os"
+
+	"github.com/mrjxtr/rpug/internal/config"
+)
 
 // Generator is the interface for generating Pinoy data.
 type Generator interface {
-	Generate(n int) (*PinoyResponse, error)
+	Generate(string, int) (*PinoyResponse, error)
 }
 
 type Pinoy struct {
@@ -50,26 +56,45 @@ type Info struct {
 }
 
 type PinoyResponse struct {
-	Results []*Pinoy `json:"results"`
+	Results *[]Pinoy `json:"results"`
 	Info    Info     `json:"info"`
 }
 
 type PinoyGenerator struct {
-	cfg *config.Config
+	cfg  *config.Config
+	seed string
+	rnd  *mathrand.Rand
 }
 
 // NewPinoyGenerator creates a new PinoyGenerator.
 func NewPinoyGenerator(cfg *config.Config) *PinoyGenerator {
-	return &PinoyGenerator{}
+	return &PinoyGenerator{
+		cfg,
+		"",
+		&mathrand.Rand{},
+	}
 }
 
 // Generate creates a PinoyResponse with n Pinoy records.
-func (g *PinoyGenerator) Generate(n int) (*PinoyResponse, error) {
-	results, err := g.generatePinoys(n)
+func (g *PinoyGenerator) Generate(
+	seedParam string,
+	resParam int,
+) (*PinoyResponse, error) {
+	if seedParam != "" {
+		g.seed = seedParam
+	}
+
+	if seed, err := generateSeed(); err == nil {
+		g.seed = seed
+		g.rnd = newRNGfromSeed(seed)
+	}
+
+	results, err := g.generatePinoys(resParam)
 	if err != nil {
 		return &PinoyResponse{}, err
 	}
-	info, err := g.generateInfo(n)
+
+	info, err := g.generateInfo(results)
 	if err != nil {
 		return &PinoyResponse{}, err
 	}
@@ -81,15 +106,53 @@ func (g *PinoyGenerator) Generate(n int) (*PinoyResponse, error) {
 }
 
 // generatePinoys creates n Pinoy records. Placeholder for now.
-func (g *PinoyGenerator) generatePinoys(n int) ([]*Pinoy, error) {
+func (g *PinoyGenerator) generatePinoys(n int) (*[]Pinoy, error) {
 	// TODO: Implement
-	return make([]*Pinoy, 0, n), nil
+	slog.Info("Generating Pinoy records", "n", n)
+	data, _ := readDataFromJSON()
+	results := &[]Pinoy{*data}
+
+	return results, nil
 }
 
 // generateInfo fills the response metadata based on n. Placeholder for now.
-func (g *PinoyGenerator) generateInfo(n int) (Info, error) {
-	// TODO: Implement
+func (g *PinoyGenerator) generateInfo(results *[]Pinoy) (Info, error) {
 	return Info{
-		Results: n,
+		Seed:    g.seed,
+		Results: len(*results),
+		// TODO: Implement pagination
+		Version: g.cfg.Version,
 	}, nil
+}
+
+func readDataFromJSON() (*Pinoy, error) {
+	fileName := "data/data.json"
+	file, err := os.Open(fileName)
+	if err != nil {
+		slog.Warn("Error while opening file", "error", err)
+	}
+	defer file.Close()
+
+	testData := &Pinoy{}
+	testData.Name.Title = "Mr"
+	testData.Name.First = "John"
+	testData.Name.Last = "Doe"
+	testData.DOB.Date = "1990-01-01"
+	testData.DOB.Age = 20
+	testData.Location.Street.Number = 123
+	testData.Location.Street.Name = "Main St"
+	testData.Location.City = "New York"
+	testData.Location.Region = "NY"
+	testData.Location.Country = "USA"
+	testData.Location.Zipcode = "10001"
+	testData.Gender = "male"
+	testData.Phone = "+1234567890"
+	testData.Email = "john.doe@example.com"
+	testData.Login.UUID = "1234567890"
+	testData.Login.Username = "john.doe"
+	testData.Login.Password = "password"
+	testData.Registered.Date = "2021-01-01"
+	testData.Registered.Age = 20
+
+	return testData, nil
 }

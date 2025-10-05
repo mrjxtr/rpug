@@ -3,6 +3,7 @@ package server
 
 import (
 	"encoding/json"
+	"fmt"
 	"log/slog"
 	"net/http"
 	"strconv"
@@ -38,7 +39,12 @@ func (s *Server) SetupRouter() *chi.Mux {
 	//? But this will be good enough for now
 	// Handler for generating random Pinoy users.
 	r.Get("/api/v1/pinoys", func(w http.ResponseWriter, r *http.Request) {
-		results, err := getResults(r)
+		seedParam, err := getSeedParam()
+		if err != nil {
+			slog.Warn("unable to get seed", "reason", err)
+		}
+
+		resParam, err := getResultsParam(r)
 		if err != nil {
 			http.Error(
 				w,
@@ -48,7 +54,7 @@ func (s *Server) SetupRouter() *chi.Mux {
 			return
 		}
 
-		resp, err := s.gen.Generate(results)
+		resp, err := s.gen.Generate(seedParam, resParam)
 		if err != nil {
 			http.Error(
 				w,
@@ -72,9 +78,9 @@ func writeJSON(w http.ResponseWriter, data any) {
 	}
 }
 
-// getResults parses ?results=n from the request and returns the number of results.
+// getResultsParam parses ?results=n from the request and returns the number of results.
 // defaulting to 1 and clamping to 1000. Returns an error if the value is not an integer.
-func getResults(r *http.Request) (int, error) {
+func getResultsParam(r *http.Request) (int, error) {
 	results := r.URL.Query().Get("results")
 	if results == "" {
 		return 1, nil
@@ -93,4 +99,11 @@ func getResults(r *http.Request) (int, error) {
 	}
 
 	return resultsInt, nil
+}
+
+// getSeedParam parses ?seed= from the request and returns the string of seed.
+// defaulting to "". Returns an error if the value is not an string.
+func getSeedParam() (string, error) {
+	// TODO: Implement
+	return "", fmt.Errorf("getSeedParam: not Implemented")
 }
