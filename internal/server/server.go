@@ -3,7 +3,6 @@ package server
 
 import (
 	"encoding/json"
-	"fmt"
 	"log/slog"
 	"net/http"
 	"strconv"
@@ -14,13 +13,13 @@ import (
 )
 
 type Server struct {
-	gen generator.Generator
+	gen generator.PinoyGenerator
 }
 
 // NewServer creates a new Server.
-func NewServer(gen generator.Generator) *Server {
+func NewServer(gen *generator.PinoyGenerator) *Server {
 	return &Server{
-		gen: gen,
+		gen: *gen,
 	}
 }
 
@@ -39,9 +38,20 @@ func (s *Server) SetupRouter() *chi.Mux {
 	//? But this will be good enough for now
 	// Handler for generating random Pinoy users.
 	r.Get("/api/v1/pinoys", func(w http.ResponseWriter, r *http.Request) {
-		seedParam, err := getSeedParam()
-		if err != nil {
-			slog.Warn("unable to get seed", "reason", err)
+		// NOTE: If seed i present, generate data based on seed
+		if seedParam := getSeedParam(r); seedParam != "" {
+			resp, err := s.gen.GenerateWithSeed(seedParam)
+			if err != nil {
+				http.Error(
+					w,
+					http.StatusText(http.StatusInternalServerError),
+					http.StatusInternalServerError,
+				)
+				return
+			}
+
+			w.Header().Set("Content-Type", "application/json; charset=utf-8")
+			writeJSON(w, resp)
 		}
 
 		resParam, err := getResultsParam(r)
@@ -54,7 +64,7 @@ func (s *Server) SetupRouter() *chi.Mux {
 			return
 		}
 
-		resp, err := s.gen.Generate(seedParam, resParam)
+		resp, err := s.gen.Generate(resParam)
 		if err != nil {
 			http.Error(
 				w,
@@ -85,6 +95,7 @@ func getResultsParam(r *http.Request) (int, error) {
 	if results == "" {
 		return 1, nil
 	}
+
 	resultsInt, err := strconv.Atoi(results)
 	if err != nil {
 		return 1, err
@@ -102,8 +113,10 @@ func getResultsParam(r *http.Request) (int, error) {
 }
 
 // getSeedParam parses ?seed= from the request and returns the string of seed.
-// defaulting to "". Returns an error if the value is not an string.
-func getSeedParam() (string, error) {
-	// TODO: Implement
-	return "", fmt.Errorf("getSeedParam: not Implemented")
+func getSeedParam(r *http.Request) string {
+	seed := r.URL.Query().Get("seed")
+	if seed != "" {
+		return seed
+	}
+	return ""
 }
