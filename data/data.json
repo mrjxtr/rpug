@@ -1,0 +1,85 @@
+{
+  "names": {
+    "titles": {"male": ["Mr"], "female": ["Ms", "Mrs"]},
+    "male_first_names": [
+      "Juan",
+      "Jose",
+      "Mark",
+      "Carlo",
+      "Aljon",
+      "Jefferson",
+      "Rodel",
+      "Aldrin",
+      "Jerome",
+      "Jomar",
+      "Angelo",
+      "Miguel",
+      "Paolo",
+      "Luis",
+      "Adrian",
+      "Bryan",
+      "Christian",
+      "Daniel",
+      "Patrick",
+      "Raymond"
+    ],
+    "female_first_names": [
+      "Maria",
+      "Ana",
+      "Kyla",
+      "Angelica",
+      "Marites",
+      "Michelle",
+      "Grace",
+      "Mika",
+      "Princess",
+      "Kathryn",
+      "Andrea",
+      "Bea",
+      "Camille",
+      "Denise",
+      "Ella",
+      "Faye",
+      "Hanna",
+      "Irene",
+      "Janelle",
+      "Kristine"
+    ],
+    "last_names": [
+      "Santos",
+      "Reyes",
+      "Cruz",
+      "Bautista",
+      "Garcia",
+      "Dela Cruz",
+      "Aquino",
+      "Fernandez",
+      "Gonzales",
+      "Mendoza",
+      "Castillo",
+      "Torres",
+      "Navarro",
+      "Ramos",
+      "Villanueva",
+      "Domingo",
+      "Tolentino",
+      "Panganiban",
+      "Soriano",
+      "Salazar"
+    ]
+  },
+  "locations": [
+    {
+      "region": "Zamboanga Del Sur",
+      "cities": ["Aurora", "Midsalip", "Molave", "Pagadian"]
+    },
+    {
+      "region": "Central Visayas",
+      "cities": ["Bohol", "Cebu", "Dumagete", "Siquijor"]
+    },
+    {
+      "region": "National Capital Region",
+      "cities": ["Makati", "Manila", "Pasay", "Quezon"]
+    }
+  ]
+}
