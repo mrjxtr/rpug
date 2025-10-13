@@ -2,6 +2,7 @@
 package generator
 
 import (
+	"encoding/json"
 	"log/slog"
 	mathrand "math/rand"
 	"os"
@@ -11,7 +12,8 @@ import (
 
 // Generator is the interface for generating Pinoy data.
 type Generator interface {
-	Generate(string, int) (*PinoyResponse, error)
+	Generate(int) (*PinoyResponse, error)
+	GenerateWithSeed(string) (*PinoyResponse, error)
 }
 
 type Pinoy struct {
@@ -77,14 +79,10 @@ func NewPinoyGenerator(cfg *config.Config) *PinoyGenerator {
 
 // Generate creates a PinoyResponse with n Pinoy records.
 func (g *PinoyGenerator) Generate(
-	seedParam string,
 	resParam int,
 ) (*PinoyResponse, error) {
-	if seedParam != "" {
-		g.seed = seedParam
-	}
-
-	if seed, err := generateSeed(); err == nil {
+	seed, err := generateSeed()
+	if err == nil {
 		g.seed = seed
 		g.rnd = newRNGfromSeed(seed)
 	}
@@ -105,14 +103,47 @@ func (g *PinoyGenerator) Generate(
 	}, nil
 }
 
-// generatePinoys creates n Pinoy records. Placeholder for now.
-func (g *PinoyGenerator) generatePinoys(n int) (*[]Pinoy, error) {
-	// TODO: Implement
-	slog.Info("Generating Pinoy records", "n", n)
-	data, _ := readDataFromJSON()
-	results := &[]Pinoy{*data}
+// GenerateWithSeed creates a PinoyResponse with seed.
+func (g *PinoyGenerator) GenerateWithSeed(seed string) (*PinoyResponse, error) {
+	return nil, nil
+}
 
-	return results, nil
+// generatePinoys creates n Pinoy records. Placeholder for now.
+// TODO: Implement
+func (g *PinoyGenerator) generatePinoys(n int) (*[]Pinoy, error) {
+	slog.Info("Generating Pinoy records", "n", n)
+	data, err := readDataFromJSON()
+	if err != nil {
+		return nil, err
+	}
+
+	pinoys := make([]Pinoy, n)
+	for i := range pinoys {
+		var p Pinoy
+
+		lastNameList := data.Names.LastNames
+		locationList := data.Locations[g.rnd.Intn(len(data.Locations))]
+
+		// pick gender first, then choose matching title and first name
+		if g.rnd.Intn(2) == 0 {
+			p.Gender = "male"
+			p.Name.Title = data.Names.Titles.Male[g.rnd.Intn(len(data.Names.Titles.Male))]
+			p.Name.First = data.Names.MaleFirstNames[g.rnd.Intn(len(data.Names.MaleFirstNames))]
+		} else {
+			p.Gender = "female"
+			p.Name.Title = data.Names.Titles.Female[g.rnd.Intn(len(data.Names.Titles.Female))]
+			p.Name.First = data.Names.FemaleFirstNames[g.rnd.Intn(len(data.Names.FemaleFirstNames))]
+		}
+		p.Name.Last = lastNameList[g.rnd.Intn(len(lastNameList))]
+
+		p.Location.Region = locationList.Region
+		p.Location.City = locationList.Cities[g.rnd.Intn(len(locationList.Cities))]
+		p.Location.Country = "Philippines"
+
+		pinoys[i] = p
+	}
+
+	return &pinoys, nil
 }
 
 // generateInfo fills the response metadata based on n. Placeholder for now.
@@ -125,34 +156,35 @@ func (g *PinoyGenerator) generateInfo(results *[]Pinoy) (Info, error) {
 	}, nil
 }
 
-func readDataFromJSON() (*Pinoy, error) {
+// Data mirrors data.json. Fields are exported and tagged for json.
+type data struct {
+	Names struct {
+		Titles struct {
+			Male   []string `json:"male"`
+			Female []string `json:"female"`
+		} `json:"titles"`
+		MaleFirstNames   []string `json:"male_first_names"`
+		FemaleFirstNames []string `json:"female_first_names"`
+		LastNames        []string `json:"last_names"`
+	} `json:"names"`
+	Locations []struct {
+		Region string   `json:"region"`
+		Cities []string `json:"cities"`
+	} `json:"locations"`
+}
+
+func readDataFromJSON() (*data, error) {
 	fileName := "data/data.json"
 	file, err := os.Open(fileName)
 	if err != nil {
-		slog.Warn("Error while opening file", "error", err)
+		return nil, err
 	}
 	defer file.Close()
 
-	testData := &Pinoy{}
-	testData.Name.Title = "Mr"
-	testData.Name.First = "John"
-	testData.Name.Last = "Doe"
-	testData.DOB.Date = "1990-01-01"
-	testData.DOB.Age = 20
-	testData.Location.Street.Number = 123
-	testData.Location.Street.Name = "Main St"
-	testData.Location.City = "New York"
-	testData.Location.Region = "NY"
-	testData.Location.Country = "USA"
-	testData.Location.Zipcode = "10001"
-	testData.Gender = "male"
-	testData.Phone = "+1234567890"
-	testData.Email = "john.doe@example.com"
-	testData.Login.UUID = "1234567890"
-	testData.Login.Username = "john.doe"
-	testData.Login.Password = "password"
-	testData.Registered.Date = "2021-01-01"
-	testData.Registered.Age = 20
+	var d data
+	if err := json.NewDecoder(file).Decode(&d); err != nil {
+		return nil, err
+	}
 
-	return testData, nil
+	return &d, nil
 }
