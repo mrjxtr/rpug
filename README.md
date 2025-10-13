@@ -42,7 +42,7 @@ make run
 go run main.go
 ```
 
-Access the API at `http://localhost:3000/api/v1/pinoys` 🎉
+Access the API at [http://localhost:3000/api/v1/pinoys](http://localhost:3000/api/v1/pinoys) 🎉
 
 ### Configuration
 
@@ -84,8 +84,8 @@ curl http://localhost:3000/api/v1/pinoys
 # Get 5 users
 curl http://localhost:3000/api/v1/pinoys?results=5
 
-# Go crazy with 100 users
-curl http://localhost:3000/api/v1/pinoys?results=100
+# Go crazy with 1000 users
+curl http://localhost:3000/api/v1/pinoys?results=1000
 ```
 
 ### Use a Seed for Reproducible Data
@@ -96,6 +96,8 @@ curl http://localhost:3000/api/v1/pinoys?seed=2d0cd4170d54fbacdcc1e679ecf394cd
 ```
 
 ## 📦 Response Format
+
+> As of 2025-10-14, some data will be blank and are still being implemented
 
 ```json
 {
@@ -137,7 +139,7 @@ curl http://localhost:3000/api/v1/pinoys?seed=2d0cd4170d54fbacdcc1e679ecf394cd
   "info": {
     "seed": "2d0cd4170d54fbacdcc1e679ecf394cd",
     "results": 1,
-    "version": "1.0.0"
+    "version": "1.x.x-alpha"
   }
 }
 ```
@@ -149,7 +151,7 @@ curl http://localhost:3000/api/v1/pinoys?seed=2d0cd4170d54fbacdcc1e679ecf394cd
 | `results` | int  | 1       | 1000 | Number of users to generate |
 | `seed`    | string | random | -   | Seed for deterministic results |
 
-**Pro tip:** Results are clamped between 1-1000. Why? Because we care about your bandwidth, pare.
+**Pro tip:** Results are clamped between 1-1000 since there is not rate limiting. (for now)
 
 ## 📝 Notes
 
@@ -162,7 +164,7 @@ This is a work in progress, pero functional na siya! Ship it! 🚢
 
 ## 📄 License
 
-This project is **free and open source** under the MIT License. Use it, fork it, share it — walang bayad! Check the `LICENSE` file for the full details.
+This project is **free and open source** under the GNU General Public License v3.0 (GPL-3.0). Use it, fork it, share it — walang bayad! Check the `LICENSE` file for the full details.
 
 Just give credit where it's due, okay? 😉
 

@@ -30,7 +30,7 @@ rpug/
 
 ```bash
 # Clone your fork
-git clone https://github.com/YOUR_USERNAME/rpug.git
+git clone https://github.com/mrjxtr/rpug.git
 cd rpug
 
 # Create a branch for your changes
@@ -192,7 +192,7 @@ Got ideas? Open an issue and let's discuss! We love hearing new ideas for making
 
 ## 📄 License
 
-By contributing, you agree that your contributions will be licensed under the MIT License.
+By contributing, you agree that your contributions will be licensed under the GNU General Public License v3.0 (GPL-3.0).
 
 ---
 
