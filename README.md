@@ -1,6 +1,6 @@
 # RANDOM PINOY USER GENERATOR (RPUG)
 
-> *"Pinoy test data ba kailangan mo?! Heto na!"* 🇵🇭
+> _"Pinoy test data ba kailangan mo?! Heto na!"_ 🇵🇭
 
 Generate realistic Filipino user data faster than you can say "Mabuhay!" Perfect for testing, demos, or when you need fake Pinoy users that actually look and feel legit.
 
@@ -38,7 +38,7 @@ cd rpug
 
 # Run the server (dependencies download automatically)
 make run
-# or 
+# or
 go run main.go
 ```
 
@@ -139,17 +139,17 @@ curl http://localhost:3000/api/v1/pinoys?seed=2d0cd4170d54fbacdcc1e679ecf394cd
   "info": {
     "seed": "2d0cd4170d54fbacdcc1e679ecf394cd",
     "results": 1,
-    "version": "1.x.x-alpha"
+    "version": "0.1.x-alpha"
   }
 }
 ```
 
 ## 🔧 Query Parameters
 
-| Parameter | Type | Default | Max | Description |
-|-----------|------|---------|-----|-------------|
-| `results` | int  | 1       | 1000 | Number of users to generate |
-| `seed`    | string | random | -   | Seed for deterministic results |
+| Parameter | Type   | Default | Max  | Description                    |
+| --------- | ------ | ------- | ---- | ------------------------------ |
+| `results` | int    | 1       | 1000 | Number of users to generate    |
+| `seed`    | string | random  | -    | Seed for deterministic results |
 
 **Pro tip:** Results are clamped between 1-1000 since there is not rate limiting. (for now)
 
