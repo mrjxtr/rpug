@@ -3,9 +3,13 @@ package generator
 
 import (
 	"encoding/json"
+	"fmt"
 	"log/slog"
 	mathrand "math/rand"
 	"os"
+	"strconv"
+	"strings"
+	"time"
 
 	"github.com/mrjxtr/rpug/internal/config"
 )
@@ -15,6 +19,8 @@ type Generator interface {
 	Generate(int) (*PinoyResponse, error)
 	GenerateWithSeed(string) (*PinoyResponse, error)
 }
+
+// TODO: Populate more Pinoy data
 
 type Pinoy struct {
 	Name struct {
@@ -27,27 +33,27 @@ type Pinoy struct {
 		Age  int    `json:"age"`
 	} `json:"dob"`
 	Location struct {
-		Street struct {
-			Number int    `json:"number"`
-			Name   string `json:"name"`
-		} `json:"street"`
+		// Street struct {
+		// 	Number int    `json:"number"`
+		// 	Name   string `json:"name"`
+		// } `json:"street"`
 		City    string `json:"city"`
 		Region  string `json:"region"`
 		Country string `json:"country"`
-		Zipcode string `json:"zipcode"`
+		// Zipcode string `json:"zipcode"`
 	} `json:"location"`
 	Gender string `json:"gender"`
 	Phone  string `json:"phone"`
 	Email  string `json:"email"`
-	Login  struct {
-		UUID     string `json:"uuid"`
-		Username string `json:"username"`
-		Password string `json:"password"`
-	} `json:"login"`
-	Registered struct {
-		Date string `json:"date"`
-		Age  int    `json:"age"`
-	} `json:"registered"`
+	// Login  struct {
+	// 	UUID     string `json:"uuid"`
+	// 	Username string `json:"username"`
+	// 	Password string `json:"password"`
+	// } `json:"login"`
+	// Registered struct {
+	// 	Date string `json:"date"`
+	// 	Age  int    `json:"age"`
+	// } `json:"registered"`
 }
 
 type Info struct {
@@ -136,9 +142,24 @@ func (g *PinoyGenerator) generatePinoys(n int) (*[]Pinoy, error) {
 		}
 		p.Name.Last = lastNameList[g.rnd.Intn(len(lastNameList))]
 
+		referenceDate := time.Date(g.cfg.ReferenceDate, 1, 1, 0, 0, 0, 0, time.UTC)
+		age := g.rnd.Intn(42) + 18
+		dob := referenceDate.AddDate(-age, -g.rnd.Intn(12), -g.rnd.Intn(28))
+
+		p.DOB.Age = age
+		// format is "1989-05-30T23:07:31.851Z"
+		p.DOB.Date = dob.Format(time.RFC3339)
+
 		p.Location.Region = locationList.Region
 		p.Location.City = locationList.Cities[g.rnd.Intn(len(locationList.Cities))]
 		p.Location.Country = "Philippines"
+
+		// TODO: Support more providers
+		p.Phone = "0909" + strconv.Itoa(g.rnd.Intn(9999999))
+
+		p.Email = strings.ToLower(
+			fmt.Sprintf("%s.%s@gmail.com", p.Name.First, p.Name.Last),
+		)
 
 		pinoys[i] = p
 	}
