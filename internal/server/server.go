@@ -38,7 +38,7 @@ func (s *Server) SetupRouter() *chi.Mux {
 	//? But this will be good enough for now
 	// Handler for generating random Pinoy users.
 	r.Get("/api/v1/pinoys", func(w http.ResponseWriter, r *http.Request) {
-		// NOTE: If seed i present, generate data based on seed
+		// NOTE: If seed is present, generate data based on seed
 		if seedParam := getSeedParam(r); seedParam != "" {
 			resp, err := s.gen.GenerateWithSeed(seedParam)
 			if err != nil {
