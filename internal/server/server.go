@@ -9,17 +9,20 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
+	"github.com/mrjxtr/rpug/internal/config"
 	"github.com/mrjxtr/rpug/internal/generator"
 )
 
 type Server struct {
-	gen generator.PinoyGenerator
+	generator generator.Generator
+	cfg       *config.Config
 }
 
-// NewServer creates a new Server.
-func NewServer(gen *generator.PinoyGenerator) *Server {
+// NewServer creates a new Server with a generator.
+func NewServer(gen generator.Generator, cfg *config.Config) *Server {
 	return &Server{
-		gen: *gen,
+		generator: gen,
+		cfg:       cfg,
 	}
 }
 
@@ -39,20 +42,7 @@ func (s *Server) SetupRouter() *chi.Mux {
 	// Handler for generating random Pinoy users.
 	r.Get("/api/v1/pinoys", func(w http.ResponseWriter, r *http.Request) {
 		// NOTE: If seed is present, generate data based on seed
-		if seedParam := getSeedParam(r); seedParam != "" {
-			resp, err := s.gen.GenerateWithSeed(seedParam)
-			if err != nil {
-				http.Error(
-					w,
-					http.StatusText(http.StatusInternalServerError),
-					http.StatusInternalServerError,
-				)
-				return
-			}
-
-			w.Header().Set("Content-Type", "application/json; charset=utf-8")
-			writeJSON(w, resp)
-		}
+		seedParam := getSeedParam(r)
 
 		resParam, err := getResultsParam(r)
 		if err != nil {
@@ -64,7 +54,7 @@ func (s *Server) SetupRouter() *chi.Mux {
 			return
 		}
 
-		resp, err := s.gen.Generate(resParam)
+		resp, err := s.generator.Generate(resParam, seedParam)
 		if err != nil {
 			http.Error(
 				w,
