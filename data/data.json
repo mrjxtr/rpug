@@ -1,6 +1,6 @@
 {
   "names": {
-    "titles": {"male": ["Mr"], "female": ["Ms", "Mrs"]},
+    "titles": { "male": ["Mr"], "female": ["Ms", "Mrs"] },
     "male_first_names": [
       "Juan",
       "Jose",
@@ -71,15 +71,30 @@
   "locations": [
     {
       "region": "Zamboanga Del Sur",
-      "cities": ["Aurora", "Midsalip", "Molave", "Pagadian"]
+      "cities": [
+        { "name": "Aurora", "zipcode": "7020" },
+        { "name": "Midsalip", "zipcode": "7010" },
+        { "name": "Molave", "zipcode": "7023" },
+        { "name": "Pagadian", "zipcode": "7016" }
+      ]
     },
     {
       "region": "Central Visayas",
-      "cities": ["Bohol", "Cebu", "Dumagete", "Siquijor"]
+      "cities": [
+        { "name": "Bohol", "zipcode": "6300" },
+        { "name": "Cebu", "zipcode": "6000" },
+        { "name": "Dumagete", "zipcode": "6200" },
+        { "name": "Siquijor", "zipcode": "6225" }
+      ]
     },
     {
       "region": "National Capital Region",
-      "cities": ["Makati", "Manila", "Pasay", "Quezon"]
+      "cities": [
+        { "name": "Makati", "zipcode": "1200" },
+        { "name": "Manila", "zipcode": "1000" },
+        { "name": "Pasay", "zipcode": "1300" },
+        { "name": "Quezon", "zipcode": "1100" }
+      ]
     }
   ]
 }

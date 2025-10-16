@@ -40,7 +40,7 @@ type Pinoy struct {
 		City    string `json:"city"`
 		Region  string `json:"region"`
 		Country string `json:"country"`
-		// Zipcode string `json:"zipcode"`
+		Zipcode string `json:"zipcode"`
 	} `json:"location"`
 	Gender string `json:"gender"`
 	Phone  string `json:"phone"`
@@ -147,12 +147,13 @@ func (g *PinoyGenerator) generatePinoys(n int) (*[]Pinoy, error) {
 		dob := referenceDate.AddDate(-age, -g.rnd.Intn(12), -g.rnd.Intn(28))
 
 		p.DOB.Age = age
-		// format is "1989-05-30T23:07:31.851Z"
 		p.DOB.Date = dob.Format(time.RFC3339)
 
+		selectedCity := locationList.Cities[g.rnd.Intn(len(locationList.Cities))]
+		p.Location.City = selectedCity.Name
 		p.Location.Region = locationList.Region
-		p.Location.City = locationList.Cities[g.rnd.Intn(len(locationList.Cities))]
 		p.Location.Country = "Philippines"
+		p.Location.Zipcode = selectedCity.Zipcode
 
 		// TODO: Support more providers
 		p.Phone = "0909" + strconv.Itoa(g.rnd.Intn(9999999))
@@ -189,8 +190,11 @@ type data struct {
 		LastNames        []string `json:"last_names"`
 	} `json:"names"`
 	Locations []struct {
-		Region string   `json:"region"`
-		Cities []string `json:"cities"`
+		Region string `json:"region"`
+		Cities []struct {
+			Name    string `json:"name"`
+			Zipcode string `json:"zipcode"`
+		} `json:"cities"`
 	} `json:"locations"`
 }
 
