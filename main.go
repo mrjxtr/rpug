@@ -22,7 +22,7 @@ func main() {
 	gen := generator.NewPinoyGenerator(cfg)
 
 	slog.Info("Loading server, middleware, and routes...")
-	srv := server.NewServer(gen)
+	srv := server.NewServer(gen, cfg)
 
 	slog.Info(
 		"Starting server",
