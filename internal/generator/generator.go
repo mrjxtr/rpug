@@ -90,10 +90,11 @@ func (g *PinoyGenerator) Generate(
 ) (*PinoyResponse, error) {
 	if seedParam == "" {
 		seed, err := generateSeed()
-		if err == nil {
-			g.seed = seed
-			g.rnd = newRNGfromSeed(seed)
-		}
+		if err != nil {
+			return nil, err
+		} 
+		g.seed = seed
+		g.rnd = newRNGfromSeed(seed)
 	} else {
 		g.seed = seedParam
 		g.rnd = newRNGfromSeed(seedParam)
