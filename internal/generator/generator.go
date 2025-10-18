@@ -4,7 +4,6 @@ package generator
 import (
 	"encoding/json"
 	"fmt"
-	"log/slog"
 	mathrand "math/rand"
 	"os"
 	"strconv"
@@ -92,7 +91,7 @@ func (g *PinoyGenerator) Generate(
 		seed, err := generateSeed()
 		if err != nil {
 			return nil, err
-		} 
+		}
 		g.seed = seed
 		g.rnd = newRNGfromSeed(seed)
 	} else {
@@ -119,7 +118,6 @@ func (g *PinoyGenerator) Generate(
 // generatePinoys creates n Pinoy records. Placeholder for now.
 // TODO: Implement
 func (g *PinoyGenerator) generatePinoys(n int) (*[]Pinoy, error) {
-	slog.Info("Generating Pinoy records", "n", n)
 	data, err := readDataFromJSON()
 	if err != nil {
 		return nil, err

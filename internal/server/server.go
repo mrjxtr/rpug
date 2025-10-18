@@ -6,9 +6,11 @@ import (
 	"log/slog"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
+	"github.com/go-chi/httprate"
 	"github.com/mrjxtr/rpug/internal/config"
 	"github.com/mrjxtr/rpug/internal/generator"
 )
@@ -33,6 +35,8 @@ func (s *Server) SetupRouter() *chi.Mux {
 
 	r.Use(middleware.Logger)
 	r.Use(middleware.Recoverer)
+	// ? NOTE: Rate limit all endpoints IP to 100 requests per minute
+	r.Use(httprate.LimitByIP(100, time.Minute))
 
 	r.Use(middleware.Heartbeat("/ping"))
 	r.Use(middleware.Compress(5))
@@ -74,7 +78,7 @@ func (s *Server) SetupRouter() *chi.Mux {
 // writeJSON writes data to the ResponseWriter as JSON. Simple and chill.
 func writeJSON(w http.ResponseWriter, data any) {
 	if err := json.NewEncoder(w).Encode(data); err != nil {
-		slog.Error("encode failed", "error", err)
+		slog.Error("Encode failed", "error", err)
 	}
 }
 
