@@ -1,6 +1,7 @@
 # RANDOM PINOY USER GENERATOR (RPUG)
 
 > _"Pinoy test data ba kailangan mo?! Heto na!"_ 🇵🇭
+> ℹ️ The API is live and ready to use at **[https://rpug.fly.dev/api/v1/pinoys](https://rpug.fly.dev/api/v1/pinoys)** — no installation required! 🚀
 
 Generate realistic Filipino user data faster than you can say "Mabuhay!" Perfect for testing, demos, or when you need fake Pinoy users that actually look and feel legit.
 
@@ -22,35 +23,26 @@ Built with Go, powered by Filipino spirit. ✨
 - **Fast & Lightweight** - Because ain't nobody got time for slow APIs
 - **JSON All The Way** - Easy to parse, easy to use
 
-## 🚀 Quick Start
+## 🌐 Live API Usage
 
-### Prerequisites
+🔗 **[https://rpug.fly.dev/api/v1/pinoys](https://rpug.fly.dev/v1/pinoys)**
 
-- Go 1.21 or higher
-- Git
-
-### Installation
+### Try It Now
 
 ```bash
-# Clone the repo
-git clone https://github.com/mrjxtr/rpug.git
-cd rpug
+# Generate 1 user
+curl https://rpug.fly.dev/api/v1/pinoys
 
-# Run the server (dependencies download automatically)
-make run
-# or
-go run main.go
+# Generate 10 users
+curl https://rpug.fly.dev/api/v1/pinoys?results=10
+
+# Use a seed for reproducible data
+curl https://rpug.fly.dev/api/v1/pinoys?seed=2d0cd4170d54fbacdcc1e679ecf394cd
 ```
 
-Access the API at [http://localhost:3000/api/v1/pinoys](http://localhost:3000/api/v1/pinoys) 🎉
+### Want to Run It Locally?
 
-### Configuration
-
-Copy the example env file (optional - has sane defaults):
-
-```bash
-cp .env.example .env
-```
+Check out the [Quick Start Guide](CONTRIBUTING.md#🛠️-development-setup) in our contributing docs if you want to run your own instance or contribute to the project.
 
 ## 📡 API Endpoints
 
@@ -75,25 +67,27 @@ Generate random Filipino user profiles. That's it. That's the API.
 ### Basic Request (1 user)
 
 ```bash
-curl http://localhost:3000/api/v1/pinoys
+curl https://rpug.fly.dev/api/v1/pinoys
 ```
 
 ### Generate Multiple Users
 
 ```bash
 # Get 5 users
-curl http://localhost:3000/api/v1/pinoys?results=5
+curl https://rpug.fly.dev/api/v1/pinoys?results=5
 
 # Go crazy with 1000 users
-curl http://localhost:3000/api/v1/pinoys?results=1000
+curl https://rpug.fly.dev/api/v1/pinoys?results=1000
 ```
 
 ### Use a Seed for Reproducible Data
 
 ```bash
 # Same seed = same data every time
-curl http://localhost:3000/api/v1/pinoys?seed=2d0cd4170d54fbacdcc1e679ecf394cd
+curl https://rpug.fly.dev/api/v1/pinoys?seed=2d0cd4170d54fbacdcc1e679ecf394cd
 ```
+
+> **Note:** If you're running locally, replace `https://rpug.fly.dev` with `http://localhost:3000`
 
 ## 📦 Response Format
 

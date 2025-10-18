@@ -28,20 +28,34 @@ rpug/
 
 ## 🛠️ Development Setup
 
+### Prerequisites
+
+- Go 1.21 or higher
+- Git
+
+### Installation & Setup
+
 ```bash
 # Clone your fork
 git clone https://github.com/mrjxtr/rpug.git
 cd rpug
 
+# (Optional) Copy the example env file - has sane defaults
+cp .env.example .env
+
 # Create a branch for your changes
 git checkout -b feature/your-feature-name
 
-# Run the server
+# Run the server (dependencies download automatically)
 make run
+# or
+go run main.go
 
 # Run tests
 make test
 ```
+
+The API will be available at [http://localhost:3000/api/v1/pinoys](http://localhost:3000/api/v1/pinoys) 🎉
 
 ## 🛠️ Build Commands
 
