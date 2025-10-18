@@ -63,7 +63,7 @@ func (c *Config) validate() error {
 		c.Env = ENV
 	}
 
-	if c.Version == "" || c.Env == "dev" {
+	if c.Version == "" || c.Env != "prod" {
 		slog.Info(
 			"Missing VERSION environment variable using default",
 			"VERSION",
