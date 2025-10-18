@@ -2,15 +2,14 @@
 package generator
 
 import (
-	"encoding/json"
 	"fmt"
 	mathrand "math/rand"
-	"os"
 	"strconv"
 	"strings"
 	"time"
 
 	"github.com/mrjxtr/rpug/internal/config"
+	"github.com/mrjxtr/rpug/internal/data"
 )
 
 // Generator is the interface for generating Pinoy data.
@@ -68,14 +67,16 @@ type PinoyResponse struct {
 
 type PinoyGenerator struct {
 	cfg  *config.Config
+	data *data.Data
 	seed string
 	rnd  *mathrand.Rand
 }
 
 // NewPinoyGenerator creates a new PinoyGenerator.
-func NewPinoyGenerator(cfg *config.Config) *PinoyGenerator {
+func NewPinoyGenerator(cfg *config.Config, d *data.Data) *PinoyGenerator {
 	return &PinoyGenerator{
 		cfg:  cfg,
+		data: d,
 		seed: "",
 		rnd:  &mathrand.Rand{},
 	}
@@ -116,21 +117,15 @@ func (g *PinoyGenerator) Generate(
 }
 
 // generatePinoys creates n Pinoy records. Placeholder for now.
-// TODO: Implement
 func (g *PinoyGenerator) generatePinoys(n int) (*[]Pinoy, error) {
-	data, err := readDataFromJSON()
-	if err != nil {
-		return nil, err
-	}
-
 	pinoys := make([]Pinoy, n)
 	for i := range pinoys {
 		var p Pinoy
 
-		nameList := data.Names
+		nameList := g.data.Names
 		lastNameList := nameList.LastNames
 		titleList := nameList.Titles
-		locationList := data.Locations[g.rnd.Intn(len(data.Locations))]
+		locationList := g.data.Locations[g.rnd.Intn(len(g.data.Locations))]
 
 		// ? NOTE: Randomize gender based on seed
 		// ? Then generate the title, first name, and last name based on gender and seed
@@ -195,42 +190,4 @@ func (g *PinoyGenerator) generateInfo(results *[]Pinoy) (Info, error) {
 		// TODO: Implement pagination
 		Version: g.cfg.Version,
 	}, nil
-}
-
-// Data mirrors data.json.
-// Fields are exported and tagged for json.
-type data struct {
-	Names struct {
-		Titles struct {
-			Male   []string `json:"male"`
-			Female []string `json:"female"`
-		} `json:"titles"`
-		MaleFirstNames   []string `json:"male_first_names"`
-		FemaleFirstNames []string `json:"female_first_names"`
-		LastNames        []string `json:"last_names"`
-	} `json:"names"`
-	Locations []struct {
-		Region string `json:"region"`
-		Cities []struct {
-			Name    string `json:"name"`
-			Zipcode string `json:"zipcode"`
-		} `json:"cities"`
-	} `json:"locations"`
-}
-
-// readDataFromJSON returns the decode data from json
-func readDataFromJSON() (*data, error) {
-	fileName := "data/data.json"
-	file, err := os.Open(fileName)
-	if err != nil {
-		return nil, err
-	}
-	defer file.Close()
-
-	var d data
-	if err := json.NewDecoder(file).Decode(&d); err != nil {
-		return nil, err
-	}
-
-	return &d, nil
 }
