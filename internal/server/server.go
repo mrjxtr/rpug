@@ -33,6 +33,7 @@ func NewServer(gen generator.Generator, cfg *config.Config) *Server {
 func (s *Server) SetupRouter() *chi.Mux {
 	r := chi.NewRouter()
 
+	r.Use(middleware.RealIP)
 	r.Use(middleware.Logger)
 	r.Use(middleware.Recoverer)
 	// ? NOTE: Rate limit all endpoints IP to 100 requests per minute
