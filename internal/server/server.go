@@ -36,9 +36,9 @@ func (s *Server) SetupRouter() *chi.Mux {
 	r.Use(middleware.RealIP)
 	r.Use(middleware.Logger)
 	r.Use(middleware.Recoverer)
-	// ? NOTE: Rate limit to 2 requests per second per IP
+	// ? NOTE: Rate limit to 60 requests per minute per IP (1 per second average)
 	// ? prevents rapid-fire and forces the use of ?results=N for multiple items
-	r.Use(httprate.LimitByRealIP(2, time.Second))
+	r.Use(httprate.LimitByRealIP(60, time.Minute))
 
 	r.Use(middleware.Heartbeat("/ping"))
 	r.Use(middleware.Compress(5))
