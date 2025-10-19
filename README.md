@@ -15,7 +15,7 @@ Built with Go, powered by Filipino spirit. ✨
 
 ## ✨ Features
 
-- **Free & Open Source** - Use it anywhere, anytime. No API keys, no rate limits, no BS
+- **Free & Open Source** - Use it anywhere, anytime. No API keys, no BS
 - **Authentic Filipino Names** - From Juan dela Cruz to Princess Mae Villanueva
 - **Real Philippine Locations** - Cities and regions from Luzon to Mindanao
 - **Deterministic Seeds** - Same seed = same data (perfect for reproducible tests)
@@ -145,7 +145,16 @@ curl https://randompinoy.xyz/api/v1/pinoys?seed=2d0cd4170d54fbacdcc1e679ecf394cd
 | `results` | int    | 1       | 1000 | Number of users to generate    |
 | `seed`    | string | random  | -    | Seed for deterministic results |
 
-**Pro tip:** Results are clamped between 1-1000 since there is not rate limiting. (for now)
+**Pro tip:** Results are clamped between 1-1000. Use the `results` parameter to get multiple users in one request instead of making rapid-fire requests.
+
+## 🚦 Rate Limiting
+
+To keep the API fast and fair for everyone, we enforce these limits:
+
+- **2 requests per second** per IP address
+- **~120 requests per minute** per IP address
+
+If you hit the limit, you'll get a `429 Too Many Requests` response. Just wait a moment and try again, or better yet — use the `results` parameter to get multiple users in a single request!
 
 ## 📝 Notes
 
