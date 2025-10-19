@@ -151,8 +151,7 @@ curl https://randompinoy.xyz/api/v1/pinoys?seed=2d0cd4170d54fbacdcc1e679ecf394cd
 
 To keep the API fast and fair for everyone, we enforce these limits:
 
-- **2 requests per second** per IP address
-- **~120 requests per minute** per IP address
+- **60 requests per minute** per IP address (~1 request per second average)
 
 If you hit the limit, you'll get a `429 Too Many Requests` response. Just wait a moment and try again, or better yet — use the `results` parameter to get multiple users in a single request!
 

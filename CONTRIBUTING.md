@@ -23,7 +23,7 @@ rpug/
 
 - **Go 1.21+** - Because we like things fast and compiled
 - **Chi Router** - Lightweight, idiomatic HTTP routing
-- **httprate** - Rate limiting middleware (2 req/sec per IP)
+- **httprate** - Rate limiting middleware (60 req/min per IP)
 - **godotenv** - For that sweet environment config
 - **Pure Go** - No external dependencies for core logic
 
@@ -58,7 +58,7 @@ make test
 
 The API will be available at [http://localhost:3000/api/v1/pinoys](http://localhost:3000/api/v1/pinoys) 🎉
 
-> **Note:** Rate limiting (2 req/sec per IP) is active in local development too. If you need to disable it for testing, comment out the rate limiter in `internal/server/server.go`
+> **Note:** Rate limiting (60 req/min per IP) is active in local development too. If you need to disable it for testing, comment out the rate limiter in `internal/server/server.go`
 
 ## 🛠️ Build Commands
 
