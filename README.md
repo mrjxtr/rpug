@@ -91,8 +91,6 @@ curl https://randompinoy.xyz/api/v1/pinoys?seed=2d0cd4170d54fbacdcc1e679ecf394cd
 
 ## 📦 Response Format
 
-> As of 2025-10-14, some data will be blank and are still being implemented
-
 ```json
 {
   "results": [
@@ -107,23 +105,14 @@ curl https://randompinoy.xyz/api/v1/pinoys?seed=2d0cd4170d54fbacdcc1e679ecf394cd
         "age": 36
       },
       "location": {
-        "street": {
-          "number": 5843,
-          "name": "Duke St"
-        },
         "city": "Pagadian",
         "region": "Zamboanga Del Sur",
         "country": "Philippines",
         "zipcode": "7016"
       },
       "gender": "male",
-      "phone": "09123456789",
-      "email": "carlo.santos@example.com",
-      "login": {
-        "uuid": "14fa0589-a264-4fdb-945b-4971d138f118",
-        "username": "carlo.santos123",
-        "password": "secret"
-      },
+      "phone": "09091234567",
+      "email": "carlo.santos@gmail.com",
       "registered": {
         "date": "2025-04-03T02:01:00.708Z",
         "age": 3
@@ -133,7 +122,7 @@ curl https://randompinoy.xyz/api/v1/pinoys?seed=2d0cd4170d54fbacdcc1e679ecf394cd
   "info": {
     "seed": "2d0cd4170d54fbacdcc1e679ecf394cd",
     "results": 1,
-    "version": "0.1.x-alpha"
+    "version": "v0.1.x-alpha"
   }
 }
 ```
@@ -157,10 +146,8 @@ If you hit the limit, you'll get a `429 Too Many Requests` response. Just wait a
 
 ## 📝 Notes
 
-- Email generation is not yet implemented (placeholder for now)
-- Phone number format coming soon
-- Date of birth and registration dates are placeholders
-- Pagination support is on the roadmap
+- Street address generation is planned for future releases
+- Pagination support is planned
 
 This is a work in progress, pero functional na siya! Ship it! 🚢
 

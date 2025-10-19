@@ -21,7 +21,7 @@ rpug/
 
 ## 🤓 Tech Stack
 
-- **Go 1.21+** - Because we like things fast and compiled
+- **Go 1.25+** - Because we like things fast and compiled
 - **Chi Router** - Lightweight, idiomatic HTTP routing
 - **httprate** - Rate limiting middleware (60 req/min per IP)
 - **godotenv** - For that sweet environment config
@@ -31,7 +31,7 @@ rpug/
 
 ### Prerequisites
 
-- Go 1.21 or higher
+- Go 1.25 or higher
 - Git
 
 ### Installation & Setup
