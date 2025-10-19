@@ -162,8 +162,9 @@ func (g *PinoyGenerator) generatePinoys(n int) (*[]Pinoy, error) {
 		p.Phone = "0909" + strconv.Itoa(g.rnd.Intn(9999999))
 
 		// ? NOTE: Create a generic email from first and last name
-		firstName := p.Name.First
-		lastName := p.Name.Last
+		// ? Remove whitespace since names can have multiple words (e.g., "Maria Clara", "Dela Cruz")
+		firstName := strings.ReplaceAll(p.Name.First, " ", "")
+		lastName := strings.ReplaceAll(p.Name.Last, " ", "")
 
 		p.Email = strings.ToLower(
 			fmt.Sprintf("%s.%s@gmail.com", firstName, lastName),
