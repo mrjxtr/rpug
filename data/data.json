@@ -2,98 +2,311 @@
   "names": {
     "titles": { "male": ["Mr"], "female": ["Ms", "Mrs"] },
     "male_first_names": [
-      "Juan",
-      "Jose",
-      "Mark",
-      "Carlo",
-      "Aljon",
-      "Jefferson",
-      "Rodel",
-      "Aldrin",
-      "Jerome",
-      "Jomar",
-      "Angelo",
-      "Miguel",
-      "Paolo",
-      "Luis",
       "Adrian",
+      "Aldrin",
+      "Aljon",
+      "Angelo",
+      "Anthony",
+      "Arnold",
       "Bryan",
+      "Carl",
+      "Carlo",
       "Christian",
       "Daniel",
+      "David",
+      "Dominic",
+      "Edward",
+      "Elmer",
+      "Ethan",
+      "Francis",
+      "Gabriel",
+      "Harold",
+      "Ivan",
+      "Jason",
+      "Jefferson",
+      "Jerome",
+      "Jester",
+      "Jomar",
+      "John",
+      "Jose",
+      "Joshua",
+      "Juan",
+      "Karl",
+      "Kenneth",
+      "Kevin",
+      "Leo",
+      "Leonardo",
+      "Luis",
+      "Mark",
+      "Marvin",
+      "Matthew",
+      "Miguel",
+      "Nathaniel",
+      "Niel",
+      "Paolo",
       "Patrick",
-      "Raymond"
+      "Paul",
+      "Raymond",
+      "Rodel",
+      "Ryan",
+      "Sean",
+      "Victor",
+      "Vincent"
     ],
     "female_first_names": [
-      "Maria",
       "Ana",
-      "Kyla",
-      "Angelica",
-      "Marites",
-      "Michelle",
-      "Grace",
-      "Mika",
-      "Princess",
-      "Kathryn",
       "Andrea",
+      "Angelica",
+      "Anna",
+      "Alyssa",
       "Bea",
+      "Bianca",
       "Camille",
+      "Charmaine",
+      "Clarisse",
       "Denise",
+      "Diane",
+      "Elaine",
       "Ella",
+      "Faith",
       "Faye",
+      "Grace",
       "Hanna",
+      "Hazel",
       "Irene",
       "Janelle",
-      "Kristine"
+      "Jasmine",
+      "Joyce",
+      "Kathryn",
+      "Kimberly",
+      "Kristine",
+      "Kyla",
+      "Lara",
+      "Leah",
+      "Lorraine",
+      "Mae",
+      "Maria",
+      "Marianne",
+      "Marites",
+      "Michelle",
+      "Mika",
+      "Nadine",
+      "Nicole",
+      "Patricia",
+      "Pauline",
+      "Princess",
+      "Queenie",
+      "Rica",
+      "Samantha",
+      "Shiela",
+      "Therese",
+      "Vanessa",
+      "Yvette",
+      "Zaira"
     ],
     "last_names": [
-      "Santos",
-      "Reyes",
-      "Cruz",
-      "Bautista",
-      "Garcia",
-      "Dela Cruz",
+      "Abad",
+      "Alvarez",
       "Aquino",
-      "Fernandez",
-      "Gonzales",
-      "Mendoza",
+      "Arroyo",
+      "Balagtas",
+      "Bautista",
+      "Benitez",
+      "Cabrera",
       "Castillo",
-      "Torres",
-      "Navarro",
-      "Ramos",
-      "Villanueva",
+      "Chavez",
+      "Concepcion",
+      "Corpuz",
+      "Cruz",
+      "De Guzman",
+      "Dela Cruz",
+      "Del Rosario",
       "Domingo",
-      "Tolentino",
+      "Duterte",
+      "Fernandez",
+      "Ferrer",
+      "Flores",
+      "Fuentes",
+      "Garcia",
+      "Gonzales",
+      "Hernandez",
+      "Lopez",
+      "Macapagal",
+      "Mendoza",
+      "Mercado",
+      "Navarro",
+      "Ocampo",
+      "Padilla",
       "Panganiban",
+      "Quintos",
+      "Ramos",
+      "Reyes",
+      "Rivera",
+      "Salazar",
+      "Santos",
       "Soriano",
-      "Salazar"
+      "Tolentino",
+      "Torres",
+      "Valdez",
+      "Villanueva"
     ]
   },
   "locations": [
     {
-      "region": "Zamboanga Del Sur",
+      "region": "Zamboanga Peninsula",
       "cities": [
-        { "name": "Aurora", "zipcode": "7020" },
-        { "name": "Midsalip", "zipcode": "7010" },
-        { "name": "Molave", "zipcode": "7023" },
-        { "name": "Pagadian", "zipcode": "7016" }
+        { "name": "Pagadian", "zipcode": "7016" },
+        { "name": "Zamboanga City", "zipcode": "7000" },
+        { "name": "Dipolog", "zipcode": "7100" },
+        { "name": "Dapitan", "zipcode": "7101" }
+      ]
+    },
+    {
+      "region": "Northern Mindanao",
+      "cities": [
+        { "name": "Cagayan de Oro", "zipcode": "9000" },
+        { "name": "Iligan", "zipcode": "9200" },
+        { "name": "Malaybalay", "zipcode": "8700" },
+        { "name": "Valencia", "zipcode": "8709" },
+        { "name": "Oroquieta", "zipcode": "7207" },
+        { "name": "Ozamiz", "zipcode": "7200" }
+      ]
+    },
+    {
+      "region": "Davao Region",
+      "cities": [
+        { "name": "Davao City", "zipcode": "8000" },
+        { "name": "Tagum", "zipcode": "8100" },
+        { "name": "Panabo", "zipcode": "8105" },
+        { "name": "Mati", "zipcode": "8200" },
+        { "name": "Digos", "zipcode": "8002" }
+      ]
+    },
+    {
+      "region": "SOCCSKSARGEN",
+      "cities": [
+        { "name": "General Santos", "zipcode": "9500" },
+        { "name": "Koronadal", "zipcode": "9506" },
+        { "name": "Kidapawan", "zipcode": "9400" },
+        { "name": "Tacurong", "zipcode": "9800" }
+      ]
+    },
+    {
+      "region": "Caraga",
+      "cities": [
+        { "name": "Butuan", "zipcode": "8600" },
+        { "name": "Surigao", "zipcode": "8400" },
+        { "name": "Bislig", "zipcode": "8311" },
+        { "name": "Tandag", "zipcode": "8300" }
+      ]
+    },
+    {
+      "region": "BARMM",
+      "cities": [
+        { "name": "Cotabato City", "zipcode": "9600" },
+        { "name": "Marawi", "zipcode": "9700" },
+        { "name": "Lamitan", "zipcode": "7302" }
+      ]
+    },
+    {
+      "region": "Western Visayas",
+      "cities": [
+        { "name": "Iloilo City", "zipcode": "5000" },
+        { "name": "Bacolod", "zipcode": "6100" },
+        { "name": "Roxas", "zipcode": "5800" },
+        { "name": "Kalibo", "zipcode": "5600" },
+        { "name": "San Jose de Buenavista", "zipcode": "5700" }
       ]
     },
     {
       "region": "Central Visayas",
       "cities": [
-        { "name": "Bohol", "zipcode": "6300" },
-        { "name": "Cebu", "zipcode": "6000" },
-        { "name": "Dumagete", "zipcode": "6200" },
-        { "name": "Siquijor", "zipcode": "6225" }
+        { "name": "Cebu City", "zipcode": "6000" },
+        { "name": "Tagbilaran", "zipcode": "6300" },
+        { "name": "Dumaguete", "zipcode": "6200" },
+        { "name": "Lapu-Lapu", "zipcode": "6015" }
+      ]
+    },
+    {
+      "region": "Eastern Visayas",
+      "cities": [
+        { "name": "Tacloban", "zipcode": "6500" },
+        { "name": "Ormoc", "zipcode": "6541" },
+        { "name": "Baybay", "zipcode": "6521" },
+        { "name": "Catbalogan", "zipcode": "6700" },
+        { "name": "Borongan", "zipcode": "6800" }
       ]
     },
     {
       "region": "National Capital Region",
       "cities": [
-        { "name": "Makati", "zipcode": "1200" },
         { "name": "Manila", "zipcode": "1000" },
+        { "name": "Quezon City", "zipcode": "1100" },
+        { "name": "Makati", "zipcode": "1200" },
         { "name": "Pasay", "zipcode": "1300" },
-        { "name": "Quezon", "zipcode": "1100" }
+        { "name": "Taguig", "zipcode": "1630" },
+        { "name": "Pasig", "zipcode": "1600" }
+      ]
+    },
+    {
+      "region": "Ilocos Region",
+      "cities": [
+        { "name": "Laoag", "zipcode": "2900" },
+        { "name": "Vigan", "zipcode": "2700" },
+        { "name": "San Fernando (La Union)", "zipcode": "2500" },
+        { "name": "Dagupan", "zipcode": "2400" },
+        { "name": "Alaminos", "zipcode": "2404" }
+      ]
+    },
+    {
+      "region": "Cagayan Valley",
+      "cities": [
+        { "name": "Tuguegarao", "zipcode": "3500" },
+        { "name": "Ilagan", "zipcode": "3300" },
+        { "name": "Santiago", "zipcode": "3311" }
+      ]
+    },
+    {
+      "region": "Central Luzon",
+      "cities": [
+        { "name": "Angeles", "zipcode": "2009" },
+        { "name": "Olongapo", "zipcode": "2200" },
+        { "name": "San Fernando (Pampanga)", "zipcode": "2000" },
+        { "name": "Tarlac City", "zipcode": "2300" }
+      ]
+    },
+    {
+      "region": "CALABARZON",
+      "cities": [
+        { "name": "Antipolo", "zipcode": "1870" },
+        { "name": "Batangas City", "zipcode": "4200" },
+        { "name": "Calamba", "zipcode": "4027" },
+        { "name": "Dasmariñas", "zipcode": "4114" },
+        { "name": "Lucena", "zipcode": "4301" }
+      ]
+    },
+    {
+      "region": "MIMAROPA",
+      "cities": [
+        { "name": "Puerto Princesa", "zipcode": "5300" },
+        { "name": "Calapan", "zipcode": "5200" },
+        { "name": "Romblon", "zipcode": "5500" }
+      ]
+    },
+    {
+      "region": "Bicol Region",
+      "cities": [
+        { "name": "Legazpi", "zipcode": "4500" },
+        { "name": "Naga", "zipcode": "4400" },
+        { "name": "Sorsogon City", "zipcode": "4700" }
+      ]
+    },
+    {
+      "region": "Cordillera Administrative Region",
+      "cities": [
+        { "name": "Baguio", "zipcode": "2600" },
+        { "name": "Tabuk", "zipcode": "3800" },
+        { "name": "La Trinidad", "zipcode": "2601" }
       ]
     }
   ]
