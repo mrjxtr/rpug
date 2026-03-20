@@ -2,7 +2,8 @@ app = "rpug"
 primary_region = "sin"
 
 [build]
-builder = "paketobuildpacks/builder-jammy-base"
+  [build.args]
+    GO_VERSION = "1.25"
 
 [env]
 PORT = "3000"
