@@ -4,7 +4,6 @@ package generator
 import (
 	"fmt"
 	mathrand "math/rand"
-	"strconv"
 	"strings"
 	"time"
 
@@ -100,11 +99,7 @@ func (g *PinoyGenerator) Generate(
 		g.rnd = newRNGfromSeed(seedParam)
 	}
 
-	results, err := g.generatePinoys(resParam)
-	if err != nil {
-		return &PinoyResponse{}, err
-	}
-
+	results := g.generatePinoys(resParam)
 	info, err := g.generateInfo(results)
 	if err != nil {
 		return &PinoyResponse{}, err
@@ -117,7 +112,7 @@ func (g *PinoyGenerator) Generate(
 }
 
 // generatePinoys creates n Pinoy records. Placeholder for now.
-func (g *PinoyGenerator) generatePinoys(n int) (*[]Pinoy, error) {
+func (g *PinoyGenerator) generatePinoys(n int) *[]Pinoy {
 	pinoys := make([]Pinoy, n)
 	for i := range pinoys {
 		var p Pinoy
@@ -126,6 +121,12 @@ func (g *PinoyGenerator) generatePinoys(n int) (*[]Pinoy, error) {
 		lastNameList := nameList.LastNames
 		titleList := nameList.Titles
 		locationList := g.data.Locations[g.rnd.Intn(len(g.data.Locations))]
+
+		globeTM := g.data.MobileProviders.GlobeTM
+		smartTntSun := g.data.MobileProviders.SmartTntSun
+		dito := g.data.MobileProviders.Dito
+
+		providerList := append(append(globeTM, smartTntSun...), dito...)
 
 		// ? NOTE: Randomize gender based on seed
 		// ? Then generate the title, first name, and last name based on gender and seed
@@ -158,8 +159,9 @@ func (g *PinoyGenerator) generatePinoys(n int) (*[]Pinoy, error) {
 		p.Location.Country = "Philippines"
 		p.Location.Zipcode = selectedCity.Zipcode
 
-		// TODO: Support more providers
-		p.Phone = "0909" + strconv.Itoa(g.rnd.Intn(9999999))
+		prefix := providerList[g.rnd.Intn(len(providerList))]
+		suffix := fmt.Sprintf("%07d", g.rnd.Intn(10000000))
+		p.Phone = prefix + suffix
 
 		// ? NOTE: Create a generic email from first and last name
 		// ? Remove whitespace since names can have multiple words (e.g., "Maria Clara", "Dela Cruz")
@@ -180,7 +182,7 @@ func (g *PinoyGenerator) generatePinoys(n int) (*[]Pinoy, error) {
 		pinoys[i] = p
 	}
 
-	return &pinoys, nil
+	return &pinoys
 }
 
 // generateInfo fills the response metadata based on n. Placeholder for now.
