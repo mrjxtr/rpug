@@ -31,8 +31,8 @@ func TestRNGDeterminism(t *testing.T) {
 	rngB := newRNGfromSeed(seed)
 
 	for range 5 {
-		n1 := rngA.Intn(1000)
-		n2 := rngB.Intn(1000)
+		n1 := rngA.IntN(1000)
+		n2 := rngB.IntN(1000)
 		if n1 != n2 {
 			t.Errorf(
 				"expected deterministic output for same seed but got %d != %d",
@@ -56,10 +56,10 @@ func TestRNGUniqueness(t *testing.T) {
 	i := 0
 	for range 5 {
 		i++
-		a := rngA.Intn(n)
-		b := rngB.Intn(n)
-		c := rngC.Intn(n)
-		d := rngD.Intn(n)
+		a := rngA.IntN(n)
+		b := rngB.IntN(n)
+		c := rngC.IntN(n)
+		d := rngD.IntN(n)
 
 		t.Logf("[%d] A:%d B:%d C:%d D:%d", i, a, b, c, d)
 

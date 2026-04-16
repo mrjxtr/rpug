@@ -3,7 +3,7 @@ package generator
 
 import (
 	"fmt"
-	mathrand "math/rand"
+	mathrand "math/rand/v2"
 	"strings"
 	"time"
 
@@ -120,7 +120,7 @@ func (g *PinoyGenerator) generatePinoys(n int) *[]Pinoy {
 		nameList := g.data.Names
 		lastNameList := nameList.LastNames
 		titleList := nameList.Titles
-		locationList := g.data.Locations[g.rnd.Intn(len(g.data.Locations))]
+		locationList := g.data.Locations[g.rnd.IntN(len(g.data.Locations))]
 
 		globeTM := g.data.MobileProviders.GlobeTM
 		smartTntSun := g.data.MobileProviders.SmartTntSun
@@ -130,37 +130,37 @@ func (g *PinoyGenerator) generatePinoys(n int) *[]Pinoy {
 
 		// ? NOTE: Randomize gender based on seed
 		// ? Then generate the title, first name, and last name based on gender and seed
-		if g.rnd.Intn(2) == 0 {
+		if g.rnd.IntN(2) == 0 {
 			p.Gender = "male"
-			p.Name.Title = titleList.Male[g.rnd.Intn(len(titleList.Male))]
-			p.Name.First = nameList.MaleFirstNames[g.rnd.Intn(len(nameList.MaleFirstNames))]
+			p.Name.Title = titleList.Male[g.rnd.IntN(len(titleList.Male))]
+			p.Name.First = nameList.MaleFirstNames[g.rnd.IntN(len(nameList.MaleFirstNames))]
 		} else {
 			p.Gender = "female"
-			p.Name.Title = titleList.Female[g.rnd.Intn(len(titleList.Female))]
-			p.Name.First = nameList.FemaleFirstNames[g.rnd.Intn(len(nameList.FemaleFirstNames))]
+			p.Name.Title = titleList.Female[g.rnd.IntN(len(titleList.Female))]
+			p.Name.First = nameList.FemaleFirstNames[g.rnd.IntN(len(nameList.FemaleFirstNames))]
 		}
-		p.Name.Last = lastNameList[g.rnd.Intn(len(lastNameList))]
+		p.Name.Last = lastNameList[g.rnd.IntN(len(lastNameList))]
 
 		// ? NOTE: Generate a random Age from a configurable referenceDate
 		// ? Then we derive the DOB from the age based on seed
 		referenceDate := time.Date(g.cfg.ReferenceDate, 1, 1, 0, 0, 0, 0, time.UTC)
-		age := g.rnd.Intn(42) + 18 // 18-60 years old
-		dob := referenceDate.AddDate(-age, -g.rnd.Intn(12), -g.rnd.Intn(28))
+		age := g.rnd.IntN(42) + 18 // 18-60 years old
+		dob := referenceDate.AddDate(-age, -g.rnd.IntN(12), -g.rnd.IntN(28))
 
 		p.DOB.Age = age
 		p.DOB.Date = dob.Format(time.RFC3339)
 
 		// TODO: Support more locations
 		// ? NOTE: Grab a random city based on seed
-		selectedCity := locationList.Cities[g.rnd.Intn(len(locationList.Cities))]
+		selectedCity := locationList.Cities[g.rnd.IntN(len(locationList.Cities))]
 
 		p.Location.City = selectedCity.Name
 		p.Location.Region = locationList.Region
 		p.Location.Country = "Philippines"
 		p.Location.Zipcode = selectedCity.Zipcode
 
-		prefix := providerList[g.rnd.Intn(len(providerList))]
-		suffix := fmt.Sprintf("%07d", g.rnd.Intn(10000000))
+		prefix := providerList[g.rnd.IntN(len(providerList))]
+		suffix := fmt.Sprintf("%07d", g.rnd.IntN(10000000))
 		p.Phone = prefix + suffix
 
 		// ? NOTE: Create a generic email from first and last name
@@ -173,8 +173,8 @@ func (g *PinoyGenerator) generatePinoys(n int) *[]Pinoy {
 		)
 
 		// ? NOTE: Generate random regestration age and date based on seed
-		regAge := g.rnd.Intn(5) // within 5 years
-		regDage := time.Now().AddDate(regAge, -g.rnd.Intn(12), -g.rnd.Intn(28))
+		regAge := g.rnd.IntN(5) // within 5 years
+		regDage := time.Now().AddDate(regAge, -g.rnd.IntN(12), -g.rnd.IntN(28))
 
 		p.Registered.Age = regAge
 		p.Registered.Date = regDage.Format(time.RFC3339)
