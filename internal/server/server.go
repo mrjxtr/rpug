@@ -15,16 +15,21 @@ import (
 	"github.com/mrjxtr/rpug/internal/generator"
 )
 
+// Generator is the interface for generating Pinoy data.
+type Generator interface {
+	Generate(results int, seed string) (*generator.PinoyResponse, error)
+}
+
 type Server struct {
-	generator generator.Generator
-	cfg       *config.Config
+	gen Generator
+	cfg *config.Config
 }
 
 // NewServer creates a new Server with a generator.
-func NewServer(gen generator.Generator, cfg *config.Config) *Server {
+func NewServer(gen Generator, cfg *config.Config) *Server {
 	return &Server{
-		generator: gen,
-		cfg:       cfg,
+		gen: gen,
+		cfg: cfg,
 	}
 }
 
@@ -48,9 +53,7 @@ func (s *Server) SetupRouter() *chi.Mux {
 	// Handler for generating random Pinoy users.
 	r.Get("/api/v1/pinoys", func(w http.ResponseWriter, r *http.Request) {
 		// NOTE: If seed is present, generate data based on seed
-		seedParam := getSeedParam(r)
-
-		resParam, err := getResultsParam(r)
+		results, err := getResultsParam(r, s.cfg.MaxResults)
 		if err != nil {
 			http.Error(
 				w,
@@ -59,8 +62,9 @@ func (s *Server) SetupRouter() *chi.Mux {
 			)
 			return
 		}
+		seed := getSeedParam(r)
 
-		resp, err := s.generator.Generate(resParam, seedParam)
+		resp, err := s.gen.Generate(results, seed)
 		if err != nil {
 			http.Error(
 				w,
@@ -85,8 +89,8 @@ func writeJSON(w http.ResponseWriter, data any) {
 }
 
 // getResultsParam parses ?results=n from the request and returns the number of results.
-// defaulting to 1 and clamping to 1000. Returns an error if the value is not an integer.
-func getResultsParam(r *http.Request) (int, error) {
+// defaulting to 1 and clamping to the provided max. Returns an error if the value is not an integer.
+func getResultsParam(r *http.Request, max int) (int, error) {
 	results := r.URL.Query().Get("results")
 	if results == "" {
 		return 1, nil
@@ -101,8 +105,8 @@ func getResultsParam(r *http.Request) (int, error) {
 		resultsInt = 1
 	}
 
-	if resultsInt > 1000 {
-		resultsInt = 1000
+	if resultsInt > max {
+		resultsInt = max
 	}
 
 	return resultsInt, nil

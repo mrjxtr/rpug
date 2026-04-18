@@ -11,11 +11,6 @@ import (
 	"github.com/mrjxtr/rpug/internal/data"
 )
 
-// Generator is the interface for generating Pinoy data.
-type Generator interface {
-	Generate(int, string) (*PinoyResponse, error)
-}
-
 // TODO: Populate more Pinoy data
 
 type Pinoy struct {
@@ -67,8 +62,6 @@ type PinoyResponse struct {
 type PinoyGenerator struct {
 	cfg  *config.Config
 	data *data.Data
-	seed string
-	rnd  *mathrand.Rand
 }
 
 // NewPinoyGenerator creates a new PinoyGenerator.
@@ -76,31 +69,28 @@ func NewPinoyGenerator(cfg *config.Config, d *data.Data) *PinoyGenerator {
 	return &PinoyGenerator{
 		cfg:  cfg,
 		data: d,
-		seed: "",
-		rnd:  &mathrand.Rand{},
 	}
 }
 
 // Generate creates a PinoyResponse with n Pinoy records.
-// Use if seedParam as seed if available, if not, we generate
+// Use seedParam as seed if available, otherwise generate one.
+// The RNG is local to this call, so Generate is safe for concurrent use.
 func (g *PinoyGenerator) Generate(
 	resParam int,
 	seedParam string,
 ) (*PinoyResponse, error) {
-	if seedParam == "" {
-		seed, err := generateSeed()
+	seed := seedParam
+	if seed == "" {
+		s, err := generateSeed()
 		if err != nil {
 			return nil, err
 		}
-		g.seed = seed
-		g.rnd = newRNGfromSeed(seed)
-	} else {
-		g.seed = seedParam
-		g.rnd = newRNGfromSeed(seedParam)
+		seed = s
 	}
+	rng := newRNGfromSeed(seed)
 
-	results := g.generatePinoys(resParam)
-	info, err := g.generateInfo(results)
+	results := g.generatePinoys(resParam, rng)
+	info, err := g.generateInfo(results, seed)
 	if err != nil {
 		return &PinoyResponse{}, err
 	}
@@ -111,8 +101,8 @@ func (g *PinoyGenerator) Generate(
 	}, nil
 }
 
-// generatePinoys creates n Pinoy records. Placeholder for now.
-func (g *PinoyGenerator) generatePinoys(n int) *[]Pinoy {
+// generatePinoys creates n Pinoy records using the provided RNG.
+func (g *PinoyGenerator) generatePinoys(n int, rng *mathrand.Rand) *[]Pinoy {
 	pinoys := make([]Pinoy, n)
 	for i := range pinoys {
 		var p Pinoy
@@ -120,7 +110,7 @@ func (g *PinoyGenerator) generatePinoys(n int) *[]Pinoy {
 		nameList := g.data.Names
 		lastNameList := nameList.LastNames
 		titleList := nameList.Titles
-		locationList := g.data.Locations[g.rnd.IntN(len(g.data.Locations))]
+		locationList := g.data.Locations[rng.IntN(len(g.data.Locations))]
 
 		globeTM := g.data.MobileProviders.GlobeTM
 		smartTntSun := g.data.MobileProviders.SmartTntSun
@@ -130,37 +120,37 @@ func (g *PinoyGenerator) generatePinoys(n int) *[]Pinoy {
 
 		// ? NOTE: Randomize gender based on seed
 		// ? Then generate the title, first name, and last name based on gender and seed
-		if g.rnd.IntN(2) == 0 {
+		if rng.IntN(2) == 0 {
 			p.Gender = "male"
-			p.Name.Title = titleList.Male[g.rnd.IntN(len(titleList.Male))]
-			p.Name.First = nameList.MaleFirstNames[g.rnd.IntN(len(nameList.MaleFirstNames))]
+			p.Name.Title = titleList.Male[rng.IntN(len(titleList.Male))]
+			p.Name.First = nameList.MaleFirstNames[rng.IntN(len(nameList.MaleFirstNames))]
 		} else {
 			p.Gender = "female"
-			p.Name.Title = titleList.Female[g.rnd.IntN(len(titleList.Female))]
-			p.Name.First = nameList.FemaleFirstNames[g.rnd.IntN(len(nameList.FemaleFirstNames))]
+			p.Name.Title = titleList.Female[rng.IntN(len(titleList.Female))]
+			p.Name.First = nameList.FemaleFirstNames[rng.IntN(len(nameList.FemaleFirstNames))]
 		}
-		p.Name.Last = lastNameList[g.rnd.IntN(len(lastNameList))]
+		p.Name.Last = lastNameList[rng.IntN(len(lastNameList))]
 
 		// ? NOTE: Generate a random Age from a configurable referenceDate
 		// ? Then we derive the DOB from the age based on seed
 		referenceDate := time.Date(g.cfg.ReferenceDate, 1, 1, 0, 0, 0, 0, time.UTC)
-		age := g.rnd.IntN(42) + 18 // 18-60 years old
-		dob := referenceDate.AddDate(-age, -g.rnd.IntN(12), -g.rnd.IntN(28))
+		age := rng.IntN(42) + 18 // 18-60 years old
+		dob := referenceDate.AddDate(-age, -rng.IntN(12), -rng.IntN(28))
 
 		p.DOB.Age = age
 		p.DOB.Date = dob.Format(time.RFC3339)
 
 		// TODO: Support more locations
 		// ? NOTE: Grab a random city based on seed
-		selectedCity := locationList.Cities[g.rnd.IntN(len(locationList.Cities))]
+		selectedCity := locationList.Cities[rng.IntN(len(locationList.Cities))]
 
 		p.Location.City = selectedCity.Name
 		p.Location.Region = locationList.Region
 		p.Location.Country = "Philippines"
 		p.Location.Zipcode = selectedCity.Zipcode
 
-		prefix := providerList[g.rnd.IntN(len(providerList))]
-		suffix := fmt.Sprintf("%07d", g.rnd.IntN(10000000))
+		prefix := providerList[rng.IntN(len(providerList))]
+		suffix := fmt.Sprintf("%07d", rng.IntN(10000000))
 		p.Phone = prefix + suffix
 
 		// ? NOTE: Create a generic email from first and last name
@@ -173,8 +163,8 @@ func (g *PinoyGenerator) generatePinoys(n int) *[]Pinoy {
 		)
 
 		// ? NOTE: Generate random regestration age and date based on seed
-		regAge := g.rnd.IntN(5) // within 5 years
-		regDage := time.Now().AddDate(regAge, -g.rnd.IntN(12), -g.rnd.IntN(28))
+		regAge := rng.IntN(5) // within 5 years
+		regDage := time.Now().AddDate(regAge, -rng.IntN(12), -rng.IntN(28))
 
 		p.Registered.Age = regAge
 		p.Registered.Date = regDage.Format(time.RFC3339)
@@ -185,10 +175,10 @@ func (g *PinoyGenerator) generatePinoys(n int) *[]Pinoy {
 	return &pinoys
 }
 
-// generateInfo fills the response metadata based on n. Placeholder for now.
-func (g *PinoyGenerator) generateInfo(results *[]Pinoy) (Info, error) {
+// generateInfo fills the response metadata based on n.
+func (g *PinoyGenerator) generateInfo(results *[]Pinoy, seed string) (Info, error) {
 	return Info{
-		Seed:    g.seed,
+		Seed:    seed,
 		Results: len(*results),
 		// TODO: Implement pagination
 		Version: g.cfg.Version,
