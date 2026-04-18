@@ -15,6 +15,8 @@ type Config struct {
 	Version string
 
 	ReferenceDate int
+
+	MaxResults int
 }
 
 // LoadConfig loads the configuration from the environment variables.
@@ -33,6 +35,8 @@ func LoadConfig() (*Config, error) {
 		Version: os.Getenv("VERSION"),
 
 		ReferenceDate: currYear,
+
+		MaxResults: 1000,
 	}
 
 	err = cfg.validate()
