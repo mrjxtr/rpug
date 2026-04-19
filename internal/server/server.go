@@ -38,6 +38,8 @@ func NewServer(gen Generator, cfg *config.Config) *Server {
 func (s *Server) SetupRouter() *chi.Mux {
 	r := chi.NewRouter()
 
+	r.Use(middleware.Heartbeat("/ping"))
+
 	r.Use(middleware.RealIP)
 	r.Use(middleware.Logger)
 	r.Use(middleware.Recoverer)
@@ -45,7 +47,6 @@ func (s *Server) SetupRouter() *chi.Mux {
 	// ? prevents rapid-fire and forces the use of ?results=N for multiple items
 	r.Use(httprate.LimitByRealIP(60, time.Minute))
 
-	r.Use(middleware.Heartbeat("/ping"))
 	r.Use(middleware.Compress(5))
 
 	//? NOTE: Could be refactor into a handlers package in the future
@@ -55,36 +56,48 @@ func (s *Server) SetupRouter() *chi.Mux {
 		// NOTE: If seed is present, generate data based on seed
 		results, err := getResultsParam(r, s.cfg.MaxResults)
 		if err != nil {
-			http.Error(
-				w,
-				http.StatusText(http.StatusBadRequest),
-				http.StatusBadRequest,
-			)
+			respondWithError(w, http.StatusBadRequest, "Invalid request payload")
 			return
 		}
 		seed := getSeedParam(r)
 
 		resp, err := s.gen.Generate(results, seed)
 		if err != nil {
-			http.Error(
+			respondWithError(
 				w,
-				http.StatusText(http.StatusInternalServerError),
 				http.StatusInternalServerError,
+				http.StatusText(http.StatusInternalServerError),
 			)
 			return
 		}
 
-		w.Header().Set("Content-Type", "application/json; charset=utf-8")
-		writeJSON(w, resp)
+		respondWithJSON(w, http.StatusOK, resp)
 	})
 
 	return r
 }
 
-// writeJSON writes data to the ResponseWriter as JSON. Simple and chill.
-func writeJSON(w http.ResponseWriter, data any) {
-	if err := json.NewEncoder(w).Encode(data); err != nil {
-		slog.Error("Encode failed", "error", err)
+// respondWithJSON encodes payload as JSON and writes it with the given status code.
+func respondWithJSON(w http.ResponseWriter, code int, payload any) {
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(code)
+
+	if err := json.NewEncoder(w).Encode(payload); err != nil {
+		slog.Error("Error encoding json", "error", err)
+		return
+	}
+}
+
+// respondWithError writes a JSON error body of the form {"error": msg} with the given status code.
+func respondWithError(w http.ResponseWriter, code int, msg string) {
+	type respBody struct {
+		Error string `json:"error"`
+	}
+
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(code)
+	if err := json.NewEncoder(w).Encode(respBody{Error: msg}); err != nil {
+		slog.Error("Error encoding json", "error", err)
 	}
 }
 
