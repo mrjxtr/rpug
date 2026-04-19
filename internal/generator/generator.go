@@ -104,19 +104,26 @@ func (g *PinoyGenerator) Generate(
 // generatePinoys creates n Pinoy records using the provided RNG.
 func (g *PinoyGenerator) generatePinoys(n int, rng *mathrand.Rand) *[]Pinoy {
 	pinoys := make([]Pinoy, n)
+
+	globeTM := g.data.MobileProviders.GlobeTM
+	smartTntSun := g.data.MobileProviders.SmartTntSun
+	dito := g.data.MobileProviders.Dito
+
+	providerList := append(append(globeTM, smartTntSun...), dito...)
+
+	nameList := g.data.Names
+	lastNameList := nameList.LastNames
+	titleList := nameList.Titles
+
+	locations := g.data.Locations
+
+	referenceDate := time.Date(g.cfg.ReferenceDate, 1, 1, 0, 0, 0, 0, time.UTC)
+	now := time.Now()
+
 	for i := range pinoys {
 		var p Pinoy
 
-		nameList := g.data.Names
-		lastNameList := nameList.LastNames
-		titleList := nameList.Titles
-		locationList := g.data.Locations[rng.IntN(len(g.data.Locations))]
-
-		globeTM := g.data.MobileProviders.GlobeTM
-		smartTntSun := g.data.MobileProviders.SmartTntSun
-		dito := g.data.MobileProviders.Dito
-
-		providerList := append(append(globeTM, smartTntSun...), dito...)
+		locationList := locations[rng.IntN(len(locations))]
 
 		// ? NOTE: Randomize gender based on seed
 		// ? Then generate the title, first name, and last name based on gender and seed
@@ -133,7 +140,6 @@ func (g *PinoyGenerator) generatePinoys(n int, rng *mathrand.Rand) *[]Pinoy {
 
 		// ? NOTE: Generate a random Age from a configurable referenceDate
 		// ? Then we derive the DOB from the age based on seed
-		referenceDate := time.Date(g.cfg.ReferenceDate, 1, 1, 0, 0, 0, 0, time.UTC)
 		age := rng.IntN(42) + 18 // 18-60 years old
 		dob := referenceDate.AddDate(-age, -rng.IntN(12), -rng.IntN(28))
 
@@ -164,7 +170,7 @@ func (g *PinoyGenerator) generatePinoys(n int, rng *mathrand.Rand) *[]Pinoy {
 
 		// ? NOTE: Generate random regestration age and date based on seed
 		regAge := rng.IntN(5) // within 5 years
-		regDage := time.Now().AddDate(regAge, -rng.IntN(12), -rng.IntN(28))
+		regDage := now.AddDate(regAge, -rng.IntN(12), -rng.IntN(28))
 
 		p.Registered.Age = regAge
 		p.Registered.Date = regDage.Format(time.RFC3339)
