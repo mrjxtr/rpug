@@ -1,5 +1,6 @@
 app = "rpug"
 primary_region = "sin"
+kill_timeout = "15s"
 
 [build]
   [build.args]
