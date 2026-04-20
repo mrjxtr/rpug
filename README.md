@@ -25,7 +25,7 @@ Built with Go, powered by Filipino spirit. ✨
 
 ## 🌐 Live API Usage
 
-🔗 **[https://randompinoy.xyz/api/v1/pinoys](https://randompinoy.xyz/v1/pinoys)**
+🔗 **[https://randompinoy.xyz/api/v1/pinoys](https://randompinoy.xyz/api/v1/pinoys)**
 
 ### Try It Now
 
