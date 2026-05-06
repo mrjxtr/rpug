@@ -64,7 +64,7 @@ func main() {
 			"http://localhost:3000/api/v1/pinoys",
 		)
 		if err := httpSrv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-			slog.Error("server failed to start", "error", err)
+			slog.Error("Server failed to start", "error", err)
 			os.Exit(1)
 		}
 	}()

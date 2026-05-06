@@ -117,8 +117,8 @@ func (g *PinoyGenerator) generatePinoys(n int, rng *mathrand.Rand) *[]Pinoy {
 
 	locations := g.data.Locations
 
-	referenceDate := time.Date(g.cfg.ReferenceDate, 1, 1, 0, 0, 0, 0, time.UTC)
 	now := time.Now()
+	referenceDate := time.Date(now.Year(), 1, 1, 0, 0, 0, 0, time.UTC)
 
 	for i := range pinoys {
 		var p Pinoy
