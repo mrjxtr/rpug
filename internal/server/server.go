@@ -15,6 +15,11 @@ import (
 	"github.com/mrjxtr/rpug/internal/generator"
 )
 
+const (
+	rateLimitPerMinute   = 60
+	gzipCompressionLevel = 5 // 1=fast, 9=best; middle ground
+)
+
 // Generator is the interface for generating Pinoy data.
 type Generator interface {
 	Generate(results int, seed string) (*generator.PinoyResponse, error)
@@ -43,11 +48,11 @@ func (s *Server) SetupRouter() *chi.Mux {
 	r.Use(middleware.RealIP)
 	r.Use(middleware.Logger)
 	r.Use(middleware.Recoverer)
-	// ? NOTE: Rate limit to 60 requests per minute per IP (1 per second average)
+	// ? NOTE: Rate limit per IP (~1 per second average)
 	// ? prevents rapid-fire and forces the use of ?results=N for multiple items
-	r.Use(httprate.LimitByRealIP(60, time.Minute))
+	r.Use(httprate.LimitByRealIP(rateLimitPerMinute, time.Minute))
 
-	r.Use(middleware.Compress(5))
+	r.Use(middleware.Compress(gzipCompressionLevel))
 
 	//? NOTE: Could be refactor into a handlers package in the future
 	//? But this will be good enough for now

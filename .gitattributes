@@ -1,1 +1,2 @@
 Makefile linguist-detectable=false
+*_templ.go linguist-generated=true

@@ -1,4 +1,5 @@
 bin/
 data/examples/
+tmp/
 
 .env

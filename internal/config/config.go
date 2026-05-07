@@ -2,11 +2,18 @@
 package config
 
 import (
+	"errors"
+	"fmt"
+	"io/fs"
 	"log/slog"
 	"os"
-	"time"
 
 	"github.com/joho/godotenv"
+)
+
+const (
+	defaultPORT       = "3000"
+	defaultMaxResults = 1000
 )
 
 type Config struct {
@@ -14,66 +21,63 @@ type Config struct {
 	Env     string
 	Version string
 
-	ReferenceDate int
-
 	MaxResults int
 }
 
 // LoadConfig loads the configuration from the environment variables.
 // if the .env file is not found, it will use the default values.
 func LoadConfig() (*Config, error) {
-	err := godotenv.Load()
-	if err != nil {
+	if err := godotenv.Load(); err != nil && !errors.Is(err, fs.ErrNotExist) {
 		slog.Warn("Error loading .env", "error", err)
 	}
-
-	currYear := time.Now().Year()
 
 	cfg := &Config{
 		Port:    os.Getenv("PORT"),
 		Env:     os.Getenv("ENV"),
 		Version: os.Getenv("VERSION"),
 
-		ReferenceDate: currYear,
-
-		MaxResults: 1000,
+		MaxResults: defaultMaxResults,
 	}
 
-	err = cfg.validate()
+	err := cfg.validate()
 	if err != nil {
-		slog.Warn("Validation error", "error", err)
+		return nil, err
 	}
 
 	return cfg, nil
 }
 
 // validate validates the configuration.
-// returning default values if the environment variables are not set.
-// returning an error if version is not set.
+// ENV must be "dev" or "prod"; VERSION is required in prod.
+// PORT defaults to 3000 if unset.
 func (c *Config) validate() error {
-	const (
-		PORT    = "3000"
-		ENV     = "dev"
-		VERSION = "debug"
-	)
+	switch c.Env {
+	case "":
+		return fmt.Errorf("missing 'ENV' environment variable")
+	case "dev":
+		// INFO: When in "dev" env, we force VERSION to "debug"
+		// override the literal below if testing `Info.Version`
+		c.Version = "debug"
+		slog.Info(
+			"Detected environment: 'DEV', running in debug mode",
+			"VERSION",
+			c.Version,
+		)
+	case "prod":
+		if c.Version == "" {
+			return fmt.Errorf("missing 'VERSION' environment variable")
+		}
+	default:
+		return fmt.Errorf("invalid 'ENV' environment variable: %q", c.Env)
+	}
 
 	if c.Port == "" {
-		slog.Info("Missing PORT environment variable using default", "PORT", PORT)
-		c.Port = PORT
-	}
-
-	if c.Env == "" {
-		slog.Info("Missing ENV environment variable using default", "ENV", ENV)
-		c.Env = ENV
-	}
-
-	if c.Version == "" || c.Env != "prod" {
 		slog.Info(
-			"Missing VERSION environment variable using default",
-			"VERSION",
-			VERSION,
+			"Missing PORT environment variable using default",
+			"PORT",
+			defaultPORT,
 		)
-		c.Version = VERSION
+		c.Port = defaultPORT
 	}
 
 	return nil
