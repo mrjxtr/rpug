@@ -17,6 +17,14 @@ import (
 	"github.com/mrjxtr/rpug/internal/server"
 )
 
+const (
+	httpReadHeaderTimeout = 5 * time.Second
+	httpReadTimeout       = 10 * time.Second
+	httpWriteTimeout      = 15 * time.Second
+	httpIdleTimeout       = 30 * time.Second
+	shutdownGrace         = 14 * time.Second // 1s under fly.toml kill_timeout (15s)
+)
+
 //go:embed data/data.json
 var dataJSON []byte
 
@@ -44,10 +52,10 @@ func main() {
 	httpSrv := &http.Server{
 		Addr:              ":" + cfg.Port,
 		Handler:           srv.SetupRouter(),
-		ReadHeaderTimeout: 5 * time.Second,
-		ReadTimeout:       10 * time.Second,
-		WriteTimeout:      15 * time.Second,
-		IdleTimeout:       30 * time.Second,
+		ReadHeaderTimeout: httpReadHeaderTimeout,
+		ReadTimeout:       httpReadTimeout,
+		WriteTimeout:      httpWriteTimeout,
+		IdleTimeout:       httpIdleTimeout,
 	}
 
 	go func() {
@@ -75,11 +83,9 @@ func main() {
 	<-quit
 	slog.Info("Shutting down server")
 
-	// Give the server 14 seconds to finish handling existing requests
-	// NOTE: I've set the kill_timeout fly.toml and WriteTimeout to 15s
 	shutdownCtx, shutdownCancel := context.WithTimeout(
 		context.Background(),
-		14*time.Second,
+		shutdownGrace,
 	)
 	defer shutdownCancel()
 

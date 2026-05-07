@@ -11,6 +11,13 @@ import (
 	"github.com/mrjxtr/rpug/internal/data"
 )
 
+const (
+	minAge               = 18
+	maxAge               = 60
+	phoneSuffixMax       = 10_000_000 // 7-digit suffix, matches "%07d" below
+	maxRegistrationYears = 5
+)
+
 // TODO: Populate more Pinoy data
 
 type Pinoy struct {
@@ -140,7 +147,7 @@ func (g *PinoyGenerator) generatePinoys(n int, rng *mathrand.Rand) *[]Pinoy {
 
 		// ? NOTE: Generate a random Age from a configurable referenceDate
 		// ? Then we derive the DOB from the age based on seed
-		age := rng.IntN(42) + 18 // 18-60 years old
+		age := rng.IntN(maxAge-minAge) + minAge
 		dob := referenceDate.AddDate(-age, -rng.IntN(12), -rng.IntN(28))
 
 		p.DOB.Age = age
@@ -156,7 +163,7 @@ func (g *PinoyGenerator) generatePinoys(n int, rng *mathrand.Rand) *[]Pinoy {
 		p.Location.Zipcode = selectedCity.Zipcode
 
 		prefix := providerList[rng.IntN(len(providerList))]
-		suffix := fmt.Sprintf("%07d", rng.IntN(10000000))
+		suffix := fmt.Sprintf("%07d", rng.IntN(phoneSuffixMax))
 		p.Phone = prefix + suffix
 
 		// ? NOTE: Create a generic email from first and last name
@@ -169,7 +176,7 @@ func (g *PinoyGenerator) generatePinoys(n int, rng *mathrand.Rand) *[]Pinoy {
 		)
 
 		// ? NOTE: Generate random regestration age and date based on seed
-		regAge := rng.IntN(5) // within 5 years
+		regAge := rng.IntN(maxRegistrationYears)
 		regDage := now.AddDate(regAge, -rng.IntN(12), -rng.IntN(28))
 
 		p.Registered.Age = regAge
