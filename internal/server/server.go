@@ -13,8 +13,9 @@ import (
 )
 
 const (
-	rateLimitPerMinute   = 60
-	gzipCompressionLevel = 5 // 1=fast, 9=best; middle ground
+	rateLimitPerMinute      = 60
+	viewsRateLimitPerMinute = 600
+	gzipCompressionLevel    = 5 // 1=fast, 9=best; middle ground
 )
 
 // Generator is the interface for generating Pinoy data.
@@ -47,17 +48,21 @@ func (s *Server) SetupRouter() *chi.Mux {
 	r.Use(middleware.RealIP)
 	r.Use(middleware.Logger)
 	r.Use(middleware.Recoverer)
-	// ? NOTE: Rate limit per IP (~1 per second average)
-	// ? prevents rapid-fire and forces the use of ?results=N for multiple items
-	r.Use(httprate.LimitByRealIP(rateLimitPerMinute, time.Minute))
 
 	r.Use(middleware.Compress(gzipCompressionLevel))
 
 	r.Handle("/static/*", s.handleStaticFS())
-	r.Get("/pinoys", s.handlePinoysPage)
-	r.Get("/", s.handleHomeRedirect)
 
-	r.Get("/api/v1/pinoys", s.handlePinoysAPI)
+	r.Group(func(r chi.Router) {
+		r.Use(httprate.LimitByRealIP(viewsRateLimitPerMinute, time.Minute))
+		r.Get("/pinoys", s.handlePinoysPage)
+		r.Get("/", s.handleHomeRedirect)
+	})
+
+	r.Route("/api/v1", func(r chi.Router) {
+		r.Use(httprate.LimitByRealIP(rateLimitPerMinute, time.Minute))
+		r.Get("/pinoys", s.handlePinoysAPI)
+	})
 
 	return r
 }
