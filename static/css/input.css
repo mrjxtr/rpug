@@ -1,2 +1,10 @@
 @import "tailwindcss";
 @source "../../internal/views/**/*.templ";
+
+/* HTMX in-flight indicator: invisible by default, fade in during a request. */
+.htmx-indicator { opacity: 0; transition: opacity 200ms ease-in; }
+.htmx-request .htmx-indicator { opacity: 1; }
+
+/* Dim the results table while a request is in flight to signal stale data. */
+#pinoy-results { transition: opacity 200ms ease-in-out; }
+.htmx-request #pinoy-results { opacity: 0.5; }

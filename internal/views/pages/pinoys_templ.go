@@ -34,7 +34,7 @@ func PinoysPage(resp *generator.PinoyResponse, max int) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"min-h-screen bg-neutral-950 p-10\"><div class=\"max-w-6xl mx-auto space-y-10\"><h1 class=\"text-4xl font-extrabold text-center text-neutral-100\">RANDOM PINOY USER GENERATOR 🇵🇭</h1><div class=\"grid gap-8 md:grid-cols-2\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div id=\"pinoys-page\" class=\"max-w-6xl mx-auto space-y-10\"><h1 class=\"text-4xl font-extrabold text-center text-neutral-100\">RANDOM PINOY USER GENERATOR 🇵🇭</h1><div class=\"grid gap-8 md:grid-cols-2\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -54,7 +54,7 @@ func PinoysPage(resp *generator.PinoyResponse, max int) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "</div></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "</div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
