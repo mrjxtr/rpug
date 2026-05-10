@@ -1,2 +1,3 @@
 Makefile linguist-detectable=false
 *_templ.go linguist-generated=true
+static/css/styles.css linguist-generated=true

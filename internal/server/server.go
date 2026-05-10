@@ -3,6 +3,7 @@ package server
 
 import (
 	"encoding/json"
+	"io/fs"
 	"log/slog"
 	"net/http"
 	"strconv"
@@ -28,13 +29,15 @@ type Generator interface {
 type Server struct {
 	gen Generator
 	cfg *config.Config
+	sfs fs.FS
 }
 
 // NewServer creates a new Server with a generator.
-func NewServer(gen Generator, cfg *config.Config) *Server {
+func NewServer(gen Generator, cfg *config.Config, sfs fs.FS) *Server {
 	return &Server{
 		gen: gen,
 		cfg: cfg,
+		sfs: sfs,
 	}
 }
 
@@ -54,11 +57,15 @@ func (s *Server) SetupRouter() *chi.Mux {
 
 	r.Use(middleware.Compress(gzipCompressionLevel))
 
+	r.Handle("/static/*", s.handleStaticFS())
+	r.Get("/pinoys", s.handlePinoysPage)
+	r.Get("/", s.handleHomeRedirect)
+
 	//? NOTE: Could be refactor into a handlers package in the future
 	//? But this will be good enough for now
 	// Handler for generating random Pinoy users.
 	r.Get("/api/v1/pinoys", func(w http.ResponseWriter, r *http.Request) {
-		results, err := getResultsParam(r, s.cfg.MaxResults)
+		results, err := s.getResultsParam(r)
 		if err != nil {
 			respondWithError(
 				w,
@@ -81,7 +88,6 @@ func (s *Server) SetupRouter() *chi.Mux {
 
 		respondWithJSON(w, http.StatusOK, resp)
 	})
-
 	return r
 }
 
@@ -111,7 +117,7 @@ func respondWithError(w http.ResponseWriter, code int, msg string) {
 
 // getResultsParam parses ?results=n from the request and returns the number of results.
 // defaulting to 1 and clamping to the provided max. Returns an error if the value is not an integer.
-func getResultsParam(r *http.Request, max int) (int, error) {
+func (s *Server) getResultsParam(r *http.Request) (int, error) {
 	results := r.URL.Query().Get("results")
 	if results == "" {
 		return 1, nil
@@ -119,15 +125,15 @@ func getResultsParam(r *http.Request, max int) (int, error) {
 
 	resultsInt, err := strconv.Atoi(results)
 	if err != nil {
-		return 1, err
+		return 0, err
 	}
 
 	if resultsInt < 1 {
 		resultsInt = 1
 	}
 
-	if resultsInt > max {
-		resultsInt = max
+	if resultsInt > s.cfg.MaxResults {
+		resultsInt = s.cfg.MaxResults
 	}
 
 	return resultsInt, nil

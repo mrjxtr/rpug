@@ -1,0 +1,19 @@
+package pages
+
+import (
+	"github.com/mrjxtr/rpug/internal/generator"
+	"github.com/mrjxtr/rpug/internal/views/components"
+)
+
+templ PinoysPage(resp *generator.PinoyResponse, max int) {
+	<div class="min-h-screen bg-neutral-950 p-10">
+		<div class="max-w-6xl mx-auto space-y-10">
+			<h1 class="text-4xl font-extrabold text-center text-neutral-100">RANDOM PINOY USER GENERATOR 🇵🇭</h1>
+			<div class="grid gap-8 md:grid-cols-2">
+				@components.Info(resp.Info)
+				@components.Form(resp.Info.Results, max)
+			</div>
+			@components.PinoysTable(resp)
+		</div>
+	</div>
+}

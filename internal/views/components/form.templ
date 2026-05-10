@@ -1,0 +1,35 @@
+package components
+
+templ Form(results int, max int) {
+	<form method="get" action="/pinoys" hx-get="/pinoys" hx-target="#pinoy-results" hx-select="#pinoy-results" hx-select-oob="#info" hx-push-url="true" class="flex flex-col gap-4 p-6 bg-neutral-900 border border-neutral-800 rounded-lg">
+		<div class="flex flex-col gap-1">
+			<h2 class="text-sm font-semibold text-neutral-300 uppercase tracking-wide text-center">Input</h2>
+			<label for="seed" class="text-sm font-medium text-neutral-300">Seed</label>
+			<input
+				id="seed"
+				type="text"
+				name="seed"
+				placeholder="optional, hex string"
+				class="px-3 py-2 bg-neutral-950 border border-neutral-700 rounded text-neutral-100 placeholder-neutral-500 focus:outline-none focus:border-blue-500"
+			/>
+		</div>
+		<div class="flex flex-col gap-1">
+			<label for="results" class="text-sm font-medium text-neutral-300">Results</label>
+			<input
+				id="results"
+				type="number"
+				name="results"
+				value={ results }
+				min="1"
+				max={ max }
+				class="px-3 py-2 bg-neutral-950 border border-neutral-700 rounded text-neutral-100 focus:outline-none focus:border-blue-500"
+			/>
+		</div>
+		<button
+			type="submit"
+			class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded transition"
+		>
+			GENERATE
+		</button>
+	</form>
+}

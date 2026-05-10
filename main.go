@@ -2,7 +2,7 @@ package main
 
 import (
 	"context"
-	_ "embed"
+	"embed"
 	"encoding/json"
 	"log/slog"
 	"net/http"
@@ -28,6 +28,9 @@ const (
 //go:embed data/data.json
 var dataJSON []byte
 
+//go:embed all:static
+var sfs embed.FS
+
 func main() {
 	slog.Info("Loading configs...")
 	cfg, err := config.LoadConfig()
@@ -47,7 +50,7 @@ func main() {
 	gen := generator.NewPinoyGenerator(cfg, &d)
 
 	slog.Info("Loading server, middleware, and routes...")
-	srv := server.NewServer(gen, cfg)
+	srv := server.NewServer(gen, cfg, sfs)
 
 	httpSrv := &http.Server{
 		Addr:              ":" + cfg.Port,

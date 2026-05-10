@@ -1,0 +1,40 @@
+package components
+
+import "github.com/mrjxtr/rpug/internal/generator"
+
+templ PinoysTable(resp *generator.PinoyResponse) {
+	<div id="pinoy-results">
+		if resp == nil || resp.Results == nil || len(*resp.Results) == 0 {
+			<p class="text-neutral-400 italic text-center py-8">No results.</p>
+		} else {
+			<div class="overflow-x-auto rounded-lg border border-neutral-800">
+				<table class="w-full text-sm text-left border-collapse">
+					<thead class="bg-neutral-800 text-neutral-100">
+						<tr>
+							<th class="px-4 py-3 font-semibold">#</th>
+							<th class="px-4 py-3 font-semibold">Name</th>
+							<th class="px-4 py-3 font-semibold">Gender</th>
+							<th class="px-4 py-3 font-semibold">Age</th>
+							<th class="px-4 py-3 font-semibold">Location</th>
+							<th class="px-4 py-3 font-semibold">Phone</th>
+							<th class="px-4 py-3 font-semibold">Email</th>
+						</tr>
+					</thead>
+					<tbody class="text-neutral-200 bg-neutral-900">
+						for i, p := range *resp.Results {
+							<tr class="border-t border-neutral-800 hover:bg-neutral-800">
+								<td class="px-4 py-3 text-neutral-500">{ i + 1 }</td>
+								<td class="px-4 py-3">{ p.Name.Title } { p.Name.First } { p.Name.Last }</td>
+								<td class="px-4 py-3 capitalize">{ p.Gender }</td>
+								<td class="px-4 py-3">{ p.DOB.Age }</td>
+								<td class="px-4 py-3">{ p.Location.City }, { p.Location.Region }</td>
+								<td class="px-4 py-3 font-mono text-xs">{ p.Phone }</td>
+								<td class="px-4 py-3">{ p.Email }</td>
+							</tr>
+						}
+					</tbody>
+				</table>
+			</div>
+		}
+	</div>
+}
