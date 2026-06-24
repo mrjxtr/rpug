@@ -8,7 +8,7 @@ import (
 templ PinoysPage(resp *generator.PinoyResponse, max int) {
 	<div id="pinoys-page" class="max-w-6xl mx-auto space-y-10">
 		<h1 class="text-4xl font-extrabold text-center text-neutral-100">RANDOM PINOY USER GENERATOR 🇵🇭</h1>
-		<div class="grid gap-8 md:grid-cols-2">
+		<div class="grid gap-8 md:grid-cols-2 mb-3">
 			@components.Info(resp.Info)
 			@components.Form(resp.Info.Results, max)
 		</div>
