@@ -177,7 +177,7 @@ func (g *PinoyGenerator) generatePinoys(n int, rng *mathrand.Rand) *[]Pinoy {
 
 		// ? NOTE: Generate random regestration age and date based on seed
 		regAge := rng.IntN(maxRegistrationYears)
-		regDage := now.AddDate(regAge, -rng.IntN(12), -rng.IntN(28))
+		regDage := now.AddDate(-regAge, -rng.IntN(12), -rng.IntN(28))
 
 		p.Registered.Age = regAge
 		p.Registered.Date = regDage.Format(time.RFC3339)
