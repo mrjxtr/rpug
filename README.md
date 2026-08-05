@@ -1,17 +1,16 @@
 # RANDOM PINOY USER GENERATOR (RPUG)
 
 > _"Pinoy test data ba kailangan mo?! Heto na!"_ 🇵🇭
-> ℹ️ The API is live and ready to use at **[https://randompinoy.xyz/api/v1/pinoys](https://randompinoy.xyz/api/v1/pinoys)** — no installation required! 🚀
 
 Generate realistic Filipino user data faster than you can say "Mabuhay!" Perfect for testing, demos, or when you need fake Pinoy users that actually look and feel legit.
 
-**100% Free. 100% Open Source. 100% Pinoy.** 🆓
+#### **100% Free. 100% Open Source. 100% Pinoy.** 🆓
 
-## 🎯 What's This All About?
+![](docs/RPUG.png)
 
-RPUG is a lightweight REST API that generates random Filipino user profiles. No more boring "John Doe" or "Jane Smith" in your test data — get authentic Pinoy names, real Philippine locations, and data that actually makes sense for Filipino users.
+## 🎯 What's RPUG?
 
-Built with Go, powered by Filipino spirit. ✨
+RPUG is a lightweight REST API that generates random Filipino user profiles. No more boring "John Doe" or "Jane Smith" in your test data. Get authentic Pinoy names, real Philippine locations, and data that actually makes sense for Filipino users.
 
 ## ✨ Features
 
@@ -101,7 +100,7 @@ curl https://randompinoy.xyz/api/v1/pinoys?seed=2d0cd4170d54fbacdcc1e679ecf394cd
         "last": "Santos"
       },
       "dob": {
-        "date": "1989-05-30T23:07:31.851Z",
+        "date": "1989-05-30T00:00:00Z",
         "age": 36
       },
       "location": {
@@ -114,7 +113,7 @@ curl https://randompinoy.xyz/api/v1/pinoys?seed=2d0cd4170d54fbacdcc1e679ecf394cd
       "phone": "09091234567",
       "email": "carlo.santos@gmail.com",
       "registered": {
-        "date": "2025-04-03T02:01:00.708Z",
+        "date": "2023-04-03T02:01:00Z",
         "age": 3
       }
     }
@@ -122,7 +121,7 @@ curl https://randompinoy.xyz/api/v1/pinoys?seed=2d0cd4170d54fbacdcc1e679ecf394cd
   "info": {
     "seed": "2d0cd4170d54fbacdcc1e679ecf394cd",
     "results": 1,
-    "version": "v0.1.x-alpha"
+    "version": "v0.3.6-beta"
   }
 }
 ```
@@ -165,5 +164,4 @@ Check out [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on how to contribute
 
 ---
 
-**Made with ❤️ and kape ☕ by [@mrjxtr](https://mrjxtr.dev)**
-**Mabuhay Pinoy developers! 🇵🇭**
+**Made with ❤️ and lots of kape ☕ by [@mrjxtr](https://mrjxtr.dev)**
